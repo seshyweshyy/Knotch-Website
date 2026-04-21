@@ -444,7 +444,7 @@
       radial-gradient(ellipse at 20% 80%, rgba(126,184,247,0.04) 0%, transparent 50%),
       radial-gradient(ellipse at 80% 20%, rgba(126,184,247,0.03) 0%, transparent 50%);
     position: relative;
-    min-height: 300px;
+    min-height: 420px;
     border-radius: 0 0 18px 18px;
     overflow: hidden;
   }
@@ -791,7 +791,7 @@
   <p class="hero-sub">Knotch transforms the MacBook notch from dead space into the most useful pixel on your screen.</p>
   <div class="hero-cta">
     <button class="btn-primary" id="download">Download for Mac — Free</button>
-    <button class="btn-secondary">See what's inside</button>
+    <button class="btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Explore features →</button>
   </div>
 
   <div class="mac-wrap">
