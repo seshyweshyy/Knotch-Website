@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a><img src="https://github.com/user-attachments/assets/1244e94f-c3e0-4b13-a7d4-7519f2fe023f" alt="Knotch" width="150"></a>
+  <a href="https://knotch.seshyweshyy.com"><img src="https://github.com/user-attachments/assets/1244e94f-c3e0-4b13-a7d4-7519f2fe023f" alt="Knotch" width="150"></a>
   <br>
   Knotch
   <br>
