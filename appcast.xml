@@ -8,7 +8,7 @@
             <sparkle:version>282</sparkle:version>
             <sparkle:shortVersionString>2.9.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://seshyweshyy.github.io/knotchapp/Knotch.zip" length="9631016" type="application/octet-stream" sparkle:edSignature="oTk3/Tix+N6fNokLP/+HEc0uj7JdTwAAZs0qOJ4s5qmb6mxnT/Na6lNX5DwcOg7GvqC8hGMZRx5Q4StsrWFrAQ=="/>
+            <enclosure url="https://github.com/seshyweshyy/knotchapp/releases/latest/download/Knotch.zip" length="9631016" type="application/octet-stream" sparkle:edSignature="oTk3/Tix+N6fNokLP/+HEc0uj7JdTwAAZs0qOJ4s5qmb6mxnT/Na6lNX5DwcOg7GvqC8hGMZRx5Q4StsrWFrAQ=="/>
         </item>
     </channel>
 </rss>
