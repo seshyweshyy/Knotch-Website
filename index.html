@@ -773,6 +773,821 @@
     .price-card { padding: 36px 24px; }
     footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
   }
+
+  /* ── Knotch interactive preview ── */
+  #knotch-preview-root {
+    width: min(820px, 92vw);
+    margin: 0 auto;
+  }
+/* ===========================================================
+   Knotch — Notch Preview Styles
+   =========================================================== */
+
+:root {
+  --sf: 'SF Pro Display','SF Pro Text',-apple-system,BlinkMacSystemFont,sans-serif;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- MacBook frame ---------- */
+.mac-frame {
+  width: 100%;
+  max-width: 980px;
+  aspect-ratio: 16 / 10;
+  margin: 0 auto;
+  position: relative;
+  filter: drop-shadow(0 40px 80px rgba(0,0,0,0.45));
+}
+.mac-frame.mac-tall { aspect-ratio: 16 / 9.5; }
+
+.mac-bezel {
+  position: absolute; inset: 0;
+  background: #0a0a0b;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.wallpaper { position: absolute; inset: 0; }
+.wallpaper-ridges { position: absolute; inset: 0; width: 100%; height: 100%; }
+.wallpaper::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 30% 20%, #3a1f7a 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 85% 30%, #2a1a6b 0%, transparent 55%),
+    linear-gradient(160deg, #2a1560 0%, #1a0f3d 60%, #0a0520 100%);
+}
+
+/* ---------- Menubar ---------- */
+.menubar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  z-index: 4;
+  font-family: var(--sf);
+  color: rgba(255,255,255,0.92);
+  font-size: 12px;
+}
+.mb-left { display: flex; align-items: center; gap: 14px; padding-left: 4px; flex: 1; }
+.mb-left .mb-apple { margin-left: 0; margin-right: 0; }
+.mb-right { display: flex; align-items: center; gap: 12px; padding-right: 2px; }
+.mb-apple { display: flex; align-items: center; justify-content: center; padding: 2px 4px; margin-right: -2px; }
+.mb-app { font-weight: 700; letter-spacing: -0.1px; font-size: 13px; }
+.mb-item { opacity: 0.95; font-weight: 400; font-size: 13px; letter-spacing: -0.05px; }
+.mb-icon { display: flex; align-items: center; justify-content: center; opacity: 0.95; }
+.mb-batt { display: flex; align-items: center; gap: 4px; color: #fff; }
+.mb-batt-pct { font-size: 12px; font-weight: 400; font-variant-numeric: tabular-nums; }
+.mb-batt-shell {
+  position: relative;
+  width: 22px; height: 10px;
+  border: 1px solid rgba(255,255,255,0.85);
+  border-radius: 3px;
+  padding: 1px;
+}
+.mb-batt-shell::after {
+  content: ''; position: absolute;
+  right: -3px; top: 2px;
+  width: 2px; height: 4px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 0 1px 1px 0;
+}
+.mb-batt-fill { height: 100%; background: #fff; border-radius: 1.5px; }
+.mb-time { font-weight: 400; letter-spacing: -0.1px; font-size: 13px; font-variant-numeric: tabular-nums; }
+
+/* ---------- Notch slot ---------- */
+.notch-slot {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.notch {
+  pointer-events: auto;
+  position: relative;
+  cursor: pointer;
+  font-family: var(--sf);
+}
+
+/* ---------- VARIANT A ---------- */
+.notch-a {
+  width: 230px;
+  height: 30px;
+  background: #000;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition:
+    width 0.5s var(--ease-spring),
+    height 0.5s var(--ease-spring),
+    border-radius 0.4s var(--ease-soft);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.4);
+}
+.notch-a.expanded {
+  width: 620px;
+  height: 200px;
+  border-bottom-left-radius: 26px;
+  border-bottom-right-radius: 26px;
+  box-shadow: 0 18px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+}
+.notch-a.locked { width: 180px; }
+
+.notch-collapsed {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px;
+  width: 100%; height: 30px;
+  position: absolute; top: 0;
+  transition: opacity 0.2s;
+}
+.notch-a.expanded .notch-collapsed { opacity: 0; pointer-events: none; }
+
+.notch-lock { display: flex; align-items: center; justify-content: flex-start; width: 100%; padding-left: 14px; }
+
+.notch-logo {
+  color: #fff; font-family: var(--sf); font-weight: 700;
+  font-size: 13px; letter-spacing: -0.5px;
+  width: 22px; text-align: center;
+}
+
+.notch-cam {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #1a1a1c;
+  box-shadow: inset 0 0 0 1px #2a2a2e;
+  flex-shrink: 0;
+}
+
+.notch-peek-slot {
+  display: flex; align-items: center; justify-content: flex-end;
+  min-width: 68px;
+  animation: peekIn 0.35s var(--ease-spring);
+}
+@keyframes peekIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.peek { display: flex; align-items: center; gap: 6px; color: #fff; }
+.peek-hud .peek-track {
+  width: 40px; height: 4px;
+  background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden;
+}
+.peek-hud .peek-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a06bd8, #f5a4d8);
+  border-radius: 2px;
+}
+.peek-batt { gap: 4px; }
+.peek-pct { font-size: 10px; font-weight: 600; color: #fff; font-variant-numeric: tabular-nums; }
+.peek-batt-shell {
+  position: relative;
+  width: 22px; height: 10px;
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 3px;
+  padding: 1px;
+}
+.peek-batt-shell::after {
+  content: ''; position: absolute;
+  right: -3px; top: 2px;
+  width: 2px; height: 4px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 0 1px 1px 0;
+}
+.peek-batt-fill { height: 100%; background: #5ce06a; border-radius: 1.5px; }
+.peek-batt-bolt { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+
+/* Panel (A) */
+.notch-panel {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s 0.15s var(--ease-soft);
+  padding: 0;
+}
+.notch-a.expanded .notch-panel { opacity: 1; pointer-events: auto; }
+
+.panel-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px;
+  flex-shrink: 0;
+}
+.panel-tabs { display: flex; align-items: center; gap: 4px; }
+.panel-tab {
+  padding: 6px 12px;
+  background: transparent; border: none; cursor: pointer;
+  border-radius: 14px;
+  color: rgba(255,255,255,0.55);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  font-family: var(--sf);
+}
+.panel-tab:hover { color: rgba(255,255,255,0.9); }
+.panel-tab.active {
+  background: #1f1f22;
+  color: #fff;
+}
+.panel-top-right { display: flex; align-items: center; gap: 10px; }
+.panel-icon-btn {
+  background: transparent; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.55);
+  padding: 4px;
+  display: flex; align-items: center; justify-content: center;
+  transition: color 0.15s;
+}
+.panel-icon-btn:hover { color: #fff; }
+
+.panel-batt-chip {
+  display: flex; align-items: center; gap: 6px;
+  color: #fff; font-size: 13px; font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.panel-batt-shell {
+  position: relative;
+  width: 28px; height: 13px;
+  border: 1.5px solid rgba(255,255,255,0.85);
+  border-radius: 3.5px;
+  padding: 1.5px;
+}
+.panel-batt-shell::after {
+  content: ''; position: absolute;
+  right: -3px; top: 3px;
+  width: 2px; height: 5px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 0 1px 1px 0;
+}
+.panel-batt-fill { height: 100%; background: #5ce06a; border-radius: 1.5px; }
+.panel-batt-bolt {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.panel-body {
+  flex: 1;
+  padding: 4px 16px 16px;
+  display: flex;
+  min-height: 0;
+  animation: stateIn 0.35s var(--ease-spring);
+}
+@keyframes stateIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- HOME state (music + calendar) ---------- */
+.state-home {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0;
+  width: 100%;
+  color: #fff;
+}
+
+/* Music side */
+.home-music {
+  display: flex;
+  gap: 16px;
+  padding: 6px 16px 6px 6px;
+  align-items: center;
+}
+.home-music .album-art {
+  width: 108px; height: 108px;
+  border-radius: 16px;
+  flex-shrink: 0;
+}
+.home-music-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.home-title {
+  font-size: 16px; font-weight: 700; color: #fff; letter-spacing: -0.2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.home-artist {
+  font-size: 13px; font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.home-progress { margin-top: 6px; display: flex; flex-direction: column; gap: 4px; }
+.home-progress-bar { height: 3px; border-radius: 2px; overflow: hidden; background: rgba(255,255,255,0.15); }
+.home-progress-fill { height: 100%; background: currentColor; border-radius: 2px; transition: width 0.4s linear; opacity: 0.95; }
+.home-progress-times {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: currentColor;
+  font-variant-numeric: tabular-nums;
+}
+.home-ctrls {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+  color: rgba(255,255,255,0.9);
+}
+.home-ctrl {
+  background: transparent; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.8);
+  padding: 4px;
+  display: flex; align-items: center; justify-content: center;
+  transition: color 0.15s, transform 0.1s;
+}
+.home-ctrl:hover { color: #fff; }
+.home-ctrl:active { transform: scale(0.92); }
+.home-ctrl-play { color: #fff; }
+
+/* Divider */
+.home-divider { background: rgba(255,255,255,0.08); width: 1px; }
+
+/* Calendar side */
+.home-cal {
+  display: flex; flex-direction: column;
+  padding: 6px 6px 6px 18px;
+  gap: 12px;
+  min-width: 0;
+}
+.home-cal-head { display: flex; align-items: flex-start; gap: 10px; }
+.home-cal-month { display: flex; flex-direction: column; align-items: flex-start; }
+.home-cal-mo { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+.home-cal-yr { font-size: 14px; color: rgba(255,255,255,0.4); font-weight: 300; letter-spacing: -0.2px; }
+.home-cal-week {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+}
+.home-cal-day {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 3px 0;
+}
+.d-label { font-size: 10px; color: rgba(255,255,255,0.45); font-weight: 500; }
+.d-num {
+  font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 500;
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  font-variant-numeric: tabular-nums;
+}
+.home-cal-day.today .d-num { background: #0a84ff; color: #fff; font-weight: 700; }
+.home-cal-day.next .d-num { background: rgba(10,132,255,0.2); color: #fff; font-weight: 600; }
+
+.home-cal-events { display: flex; flex-direction: column; gap: 6px; min-height: 0; overflow: hidden; }
+.home-evt {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 2px 0;
+}
+.home-evt-bar {
+  width: 2px; align-self: stretch;
+  border-radius: 2px;
+  flex-shrink: 0;
+  min-height: 28px;
+}
+.home-evt-meta { flex: 1; min-width: 0; }
+.home-evt-title {
+  font-size: 12px; font-weight: 600; color: #fff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.home-evt-sub { font-size: 10.5px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+.home-evt-times {
+  font-size: 11px; color: #fff; text-align: right;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.home-evt-end { color: rgba(255,255,255,0.45); font-size: 10.5px; margin-top: 1px; }
+
+/* Shelf */
+.state-shelf { color: #fff; width: 100%; display: flex; flex-direction: column; gap: 10px; padding: 10px 4px; }
+.shelf-files { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.shelf-file {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 12px 6px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  border: 1px dashed rgba(255,255,255,0.08);
+}
+.shelf-drop {
+  background: rgba(255,255,255,0.02);
+  border: 1px dashed rgba(255,255,255,0.18);
+  justify-content: center;
+  min-height: 72px;
+}
+.shelf-thumb { width: 40px; height: 40px; border-radius: 6px; }
+.shelf-pdf {
+  background: rgba(245,164,216,0.15);
+  border: 1px solid rgba(245,164,216,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: #f5a4d8; letter-spacing: 0.05em;
+}
+.shelf-name {
+  font-size: 10px; color: rgba(255,255,255,0.65);
+  max-width: 70px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.shelf-caption {
+  font-size: 10.5px; color: rgba(255,255,255,0.35);
+  text-align: center;
+}
+
+/* ---------- Album art ---------- */
+.album-art {
+  border-radius: 10px;
+  background: linear-gradient(145deg, #5a2ab0, #a06bd8 60%, #f5a4d8);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  position: relative;
+}
+.album-spotify {
+  background: #1db954;
+  box-shadow: 0 4px 20px rgba(29,185,84,0.3);
+}
+
+/* ---------- Lock / Desktop content ---------- */
+.mac-content {
+  position: absolute;
+  top: 30px; left: 0; right: 0; bottom: 0;
+  z-index: 2;
+}
+.lock-screen {
+  height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  gap: 2px;
+  padding-top: 18px;
+  color: rgba(255,255,255,0.95);
+  font-family: var(--sf);
+  position: relative;
+}
+.lock-date { font-size: 14px; opacity: 0.85; font-weight: 500; }
+.lock-time {
+  font-size: 64px; font-weight: 300; letter-spacing: -2px;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 2px 40px rgba(255,255,255,0.2);
+}
+.lock-widgets { display: flex; gap: 18px; margin-top: 6px; }
+.lock-widget { display: flex; align-items: center; gap: 5px; font-size: 12px; color: rgba(255,255,255,0.85); }
+.lock-hint {
+  position: absolute; bottom: 16px;
+  font-size: 11px; color: rgba(255,255,255,0.55);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 0.9; } }
+
+.desktop { height: 100%; position: relative; }
+.desktop-dock {
+  position: absolute;
+  bottom: 10px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 6px;
+  padding: 6px 10px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 14px;
+}
+.dock-icon {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.dock-k {
+  background: linear-gradient(180deg, #2a2a2c 0%, #0a0a0b 100%);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-family: 'Instrument Serif', 'Snell Roundhand', 'Zapfino', cursive;
+  font-weight: 400; font-style: italic;
+  font-size: 26px; letter-spacing: -1px;
+  line-height: 1;
+  padding-bottom: 2px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.4);
+}
+.dock-k span { transform: translateY(1px); text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+.hover-hint {
+  position: absolute;
+  top: 16px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px; color: rgba(255,255,255,0.55);
+  animation: pulse 2s ease-in-out infinite;
+  font-family: var(--sf);
+}
+.relock-btn {
+  position: absolute;
+  bottom: 14px; right: 14px;
+  display: flex; align-items: center; gap: 4px;
+  padding: 5px 10px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 100px;
+  color: rgba(255,255,255,0.7);
+  font-size: 10.5px;
+  font-family: var(--sf);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: background 0.15s;
+}
+.relock-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+/* ---------- VARIANT B: Floating tray ---------- */
+.notch-b {
+  width: 230px; height: 30px;
+  background: #000;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: width 0.4s var(--ease-spring);
+}
+.notch-b.locked { width: 180px; }
+
+.floating-tray {
+  position: absolute;
+  top: 40px; left: 50%;
+  transform: translateX(-50%) translateY(-12px) scale(0.9);
+  width: 720px;
+  background: rgba(15,10,40,0.85);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 22px;
+  backdrop-filter: blur(40px) saturate(1.4);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  opacity: 0; pointer-events: none;
+  transition:
+    transform 0.5s var(--ease-spring),
+    opacity 0.3s var(--ease-soft);
+  z-index: 25;
+  overflow: hidden;
+}
+.floating-tray.open {
+  transform: translateX(-50%) translateY(0) scale(1);
+  opacity: 1; pointer-events: auto;
+}
+.tray-rail {
+  display: flex; align-items: center; gap: 4px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.rail-dot {
+  padding: 6px 12px;
+  background: transparent; border: none; cursor: pointer;
+  border-radius: 14px;
+  color: rgba(255,255,255,0.4);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.rail-dot:hover { color: rgba(255,255,255,0.8); }
+.rail-dot.active { background: rgba(255,255,255,0.1); color: #fff; }
+.tray-body {
+  padding: 14px 16px 16px;
+  animation: stateIn 0.4s var(--ease-spring);
+}
+
+/* ---------- VARIANT C: Split pill ---------- */
+.notch-c {
+  height: 30px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+.notch-center {
+  width: 210px; height: 30px;
+  background: #000;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px;
+  padding: 0 12px;
+  transition: width 0.4s var(--ease-spring);
+  position: relative;
+  z-index: 2;
+}
+.notch-c.locked .notch-center { width: 170px; }
+
+.notch-side {
+  height: 28px;
+  background: #000;
+  border-radius: 0 0 14px 14px;
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 10px;
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: width 0.5s var(--ease-spring), opacity 0.3s var(--ease-soft), padding 0.4s var(--ease-soft);
+  color: #fff;
+  font-family: var(--sf);
+  font-size: 10px;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+.notch-side-l { right: calc(50% + 108px); }
+.notch-side-r { left: calc(50% + 108px); }
+.notch-c.expanded .notch-side { width: 130px; opacity: 1; }
+.notch-c.expanded .notch-side-r { width: 90px; }
+
+.side-meta { display: flex; flex-direction: column; min-width: 0; }
+.side-title { font-size: 10px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
+.side-sub { font-size: 9px; color: rgba(255,255,255,0.5); }
+
+.side-batt { display: flex; }
+.side-batt-shell {
+  width: 22px; height: 10px;
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 2px;
+  padding: 1px;
+  position: relative;
+}
+.side-batt-shell::after {
+  content: ''; position: absolute;
+  right: -3px; top: 2px;
+  width: 2px; height: 4px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 0 1px 1px 0;
+}
+.side-batt-fill { height: 100%; background: #5ce06a; border-radius: 1.5px; }
+.side-pct { font-size: 10px; font-weight: 500; }
+
+.ctray {
+  position: absolute;
+  top: 36px; left: 50%;
+  transform: translateX(-50%) translateY(-12px) scale(0.94);
+  width: 720px;
+  background: #0a0a0b;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  opacity: 0; pointer-events: none;
+  transition: transform 0.5s var(--ease-spring), opacity 0.3s var(--ease-soft);
+  z-index: 3;
+  overflow: hidden;
+}
+.notch-c.expanded .ctray {
+  transform: translateX(-50%) translateY(0) scale(1);
+  opacity: 1; pointer-events: auto;
+}
+.ctray-tabs {
+  display: flex; align-items: center; gap: 2px;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.ctray-tab {
+  padding: 6px 12px;
+  background: transparent; border: none; cursor: pointer;
+  border-radius: 14px;
+  color: rgba(255,255,255,0.4);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.ctray-tab:hover { color: rgba(255,255,255,0.8); }
+.ctray-tab.active { background: #1f1f22; color: #fff; }
+.ctray-body {
+  padding: 4px 16px 16px;
+  animation: stateIn 0.4s var(--ease-spring);
+}
+
+/* ---------- Now Playing Live Activity (left of closed notch) ---------- */
+.notch-collapsed { justify-content: space-between; }
+.np-live {
+  display: flex; align-items: center; gap: 6px;
+  min-width: 48px;
+  animation: peekIn 0.35s var(--ease-spring);
+}
+.np-live .album-art { width: 18px !important; height: 18px !important; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.4); }
+.np-viz { display: flex; align-items: flex-end; gap: 1.5px; height: 11px; }
+.np-bar {
+  width: 2px; background: #ff9a5a; border-radius: 1px;
+  height: 3px;
+  transform-origin: bottom;
+}
+.np-bar.playing { animation: npPulse 0.9s ease-in-out infinite; }
+.np-b1.playing { animation-delay: 0s; }
+.np-b2.playing { animation-delay: 0.15s; }
+.np-b3.playing { animation-delay: 0.3s; }
+.np-b4.playing { animation-delay: 0.1s; }
+@keyframes npPulse {
+  0%, 100% { height: 3px; }
+  50% { height: 10px; }
+}
+
+/* Reminder event variant */
+.home-evt-reminder .home-evt-check {
+  display: flex; align-items: center; justify-content: center;
+  align-self: flex-start;
+  padding-top: 1px;
+}
+.check-circle {
+  width: 15px; height: 15px; border-radius: 50%;
+  border: 1.8px solid currentColor;
+  background: transparent;
+  display: block;
+}
+
+/* ---------- Lock-screen music widget (Apple-Music style) ---------- */
+.lock-music-wrap {
+  position: absolute;
+  bottom: 18px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  width: 320px;
+}
+/* Giant album art that appears ABOVE the pill when expanded */
+.lock-music-hero {
+  width: 0; height: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px) scale(0.6);
+  transition: width 0.45s var(--ease-spring), height 0.45s var(--ease-spring),
+              opacity 0.3s var(--ease-soft), transform 0.45s var(--ease-spring),
+              margin 0.45s var(--ease-spring);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+  margin: 0;
+  cursor: pointer;
+}
+.lock-music-hero.visible {
+  width: 200px; height: 200px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  margin-bottom: 4px;
+}
+.lock-music-hero .album-art { width: 100% !important; height: 100% !important; border-radius: 14px; box-shadow: none; }
+
+/* The pill stays the same size in both states */
+.lock-music {
+  width: 100%;
+  background: rgba(28, 20, 38, 0.55);
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 10px 14px 12px;
+  display: flex; flex-direction: column; gap: 8px;
+  cursor: pointer;
+  color: #fff;
+  font-family: var(--sf);
+  overflow: hidden;
+  transition: background 0.2s;
+}
+.lock-music:hover { background: rgba(32, 24, 42, 0.62); }
+
+/* Top row: thumb + meta + mini waveform */
+.lm-top { display: flex; align-items: center; gap: 10px; }
+.lm-thumb {
+  width: 32px; height: 32px; border-radius: 6px;
+  flex-shrink: 0; overflow: hidden;
+  transition: opacity 0.3s, width 0.3s, height 0.3s;
+}
+.lm-thumb .album-art { width: 100% !important; height: 100% !important; border-radius: 6px; box-shadow: none; }
+.lock-music.expanded .lm-thumb { width: 0; height: 0; opacity: 0; margin-right: -10px; }
+.lm-meta { flex: 1; min-width: 0; }
+.lm-title { font-size: 14px; font-weight: 600; letter-spacing: -0.15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lm-artist { font-size: 12px; color: rgba(255,255,255,0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+.lm-viz {
+  display: flex; align-items: flex-end; gap: 2px; height: 16px;
+  flex-shrink: 0;
+  padding-bottom: 2px;
+}
+.lm-viz span {
+  width: 2.5px; background: rgba(255,255,255,0.9); border-radius: 1px;
+  height: 4px;
+}
+.lm-viz.playing span { animation: lmPulse 0.9s ease-in-out infinite; }
+.lm-viz.playing span:nth-child(1) { animation-delay: 0s; }
+.lm-viz.playing span:nth-child(2) { animation-delay: 0.15s; }
+.lm-viz.playing span:nth-child(3) { animation-delay: 0.3s; }
+.lm-viz.playing span:nth-child(4) { animation-delay: 0.1s; }
+@keyframes lmPulse { 0%,100% { height: 4px; } 50% { height: 14px; } }
+
+/* Progress bar with end-cap times */
+.lm-prog-row {
+  display: flex; align-items: center; gap: 8px;
+  font-variant-numeric: tabular-nums;
+  font-size: 10px; color: rgba(255,255,255,0.55);
+}
+.lm-prog-bar {
+  flex: 1;
+  height: 3px; background: rgba(255,255,255,0.18); border-radius: 2px; overflow: hidden;
+}
+.lm-prog-fill { height: 100%; background: rgba(255,255,255,0.85); border-radius: 2px; transition: width 0.4s linear; }
+
+/* Controls row */
+.lm-ctrls {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 4px;
+  padding-top: 2px;
+}
+.lm-ctrl {
+  background: transparent; border: none; cursor: pointer;
+  color: #fff;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  transition: background 0.15s;
+}
+.lm-ctrl:hover { background: rgba(255,255,255,0.12); }
+
+.lock-screen .lock-hint { display: none; }
+
 </style>
 </head>
 <body>
@@ -796,218 +1611,491 @@
     <button class="btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Explore features →</button>
   </div>
 
-  <div class="mac-wrap">
-    <div class="mac-frame" id="macFrame">
+  <div id="knotch-preview-root"></div>
 
-      <!-- TOP BAR -->
-      <div class="mac-notch-bar">
-        <!-- Left menubar items -->
-        <div class="menubar-left">
-          <span class="menubar-apple">&#xf8ff;</span>
-          <span class="menubar-item">Finder</span>
-          <span class="menubar-item">File</span>
-          <span class="menubar-item">Edit</span>
-        </div>
-        <!-- Right menubar -->
-        <div class="menubar-right">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="rgba(255,255,255,0.7)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-          <span class="menubar-battery">90%</span>
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="rgba(255,255,255,0.5)"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm-1 17.93V18a1 1 0 0 1 2 0v1.93A8.001 8.001 0 0 1 4.07 13H6a1 1 0 0 1 0 2H4.07A8.001 8.001 0 0 1 11 4.07V6a1 1 0 0 1 2 0V4.07A8.001 8.001 0 0 1 19.93 11H18a1 1 0 0 1 0-2h1.93A8.001 8.001 0 0 1 13 19.93z"/></svg>
-          <span class="menubar-time">9:41</span>
-        </div>
+    <!-- Knotch interactive preview scripts -->
+    <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+    <script type="text/babel">
+// Shared purple Monterey-style wallpaper used inside every MacBook frame.
+// Pure CSS gradients + a couple of SVG "ridge" curves layered for depth.
+const Wallpaper = () => (
+  <div className="wallpaper">
+    <svg className="wallpaper-ridges" viewBox="0 0 1000 560" preserveAspectRatio="none" aria-hidden>
+      <defs>
+        <linearGradient id="r1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#4a2a8a" stopOpacity="0.9"/>
+          <stop offset="100%" stopColor="#1a0f3d" stopOpacity="1"/>
+        </linearGradient>
+        <linearGradient id="r2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#6b3fb5" stopOpacity="0.55"/>
+          <stop offset="100%" stopColor="#2a1555" stopOpacity="0.9"/>
+        </linearGradient>
+        <linearGradient id="r3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#a06bd8" stopOpacity="0.45"/>
+          <stop offset="100%" stopColor="#3a1a6b" stopOpacity="0.8"/>
+        </linearGradient>
+        <radialGradient id="glow" cx="50%" cy="95%" r="60%">
+          <stop offset="0%" stopColor="#ffb5d8" stopOpacity="0.35"/>
+          <stop offset="100%" stopColor="#ffb5d8" stopOpacity="0"/>
+        </radialGradient>
+      </defs>
+      {/* back ridge */}
+      <path d="M0,200 C180,120 320,280 500,240 C680,200 820,340 1000,260 L1000,560 L0,560 Z" fill="url(#r1)"/>
+      {/* mid ridge */}
+      <path d="M0,320 C160,260 300,380 480,340 C660,300 820,420 1000,360 L1000,560 L0,560 Z" fill="url(#r2)"/>
+      {/* front ridge */}
+      <path d="M0,420 C200,380 340,460 520,430 C700,400 840,480 1000,450 L1000,560 L0,560 Z" fill="url(#r3)"/>
+      {/* pink glow */}
+      <rect x="0" y="0" width="1000" height="560" fill="url(#glow)"/>
+    </svg>
+  </div>
+);
 
-        <!-- NOTCH -->
-        <div class="mac-notch" id="notch" onclick="toggleNotch()">
-          <div class="notch-content-collapsed">
-            <div class="notch-cam"></div>
-          </div>
-          <!-- Expanded: full panel drops below -->
-        </div>
-      </div>
+window.Wallpaper = Wallpaper;
 
-      <!-- EXPANDED KNOTCH PANEL -->
-      <div class="knotch-panel" id="knotchPanel">
-        <!-- Tab bar -->
-        <div class="knotch-tabs">
-          <div class="knotch-tab active">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          </div>
-          <div class="knotch-tab">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.07-.44.18-.86.18-1.3C18 2.12 15.88 0 13.3 0c-1.3 0-2.4.52-3.27 1.34L9 2.4l-1.04-1.04C7.1.52 5.98 0 4.7 0 2.12 0 0 2.12 0 4.7c0 .44.11.86.18 1.3H0v2h20V6z M0 8v12h20V8H0zm9 10H3v-2h6v2zm6 0h-4v-2h4v2zm3-4H6v-2h12v2z"/></svg>
-          </div>
-          <div class="knotch-tab-right">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="rgba(255,255,255,0.45)"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-          </div>
-        </div>
+// MacBook frame shell — macOS menu bar with Apple icon + system tray SF icons.
+// Children are rendered INSIDE the screen area (below the menubar).
 
-        <!-- Main content: music left, calendar right -->
-        <div class="knotch-body">
-          <!-- MUSIC SIDE -->
-          <div class="knotch-music">
-            <div class="knotch-album">
-              <div class="knotch-album-art">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                  <rect width="32" height="32" rx="6" fill="linear-gradient(135deg,#1a5bbf,#2a84e8)"/>
-                  <path d="M13 22V12l11-2.5v10" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="11" cy="22" r="2.2" fill="white"/>
-                  <circle cx="22" cy="19.5" r="2.2" fill="white"/>
-                </svg>
-              </div>
-              <div class="knotch-spotify-badge">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-              </div>
-            </div>
-            <div class="knotch-track-info">
-              <div class="knotch-track-name">Good Days</div>
-              <div class="knotch-track-artist">SZA</div>
-            </div>
-            <div class="knotch-progress-wrap">
-              <div class="knotch-progress-bar">
-                <div class="knotch-progress-fill" style="width:40%"></div>
-              </div>
-              <div class="knotch-progress-times">
-                <span>1:25</span><span>3:32</span>
-              </div>
-            </div>
-            <div class="knotch-controls">
-              <div class="knotch-ctrl-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
-              </div>
-              <div class="knotch-ctrl-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,255,0.8)"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-              </div>
-              <div class="knotch-ctrl-btn knotch-ctrl-play">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-              </div>
-              <div class="knotch-ctrl-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,255,0.8)"><path d="M6 18l8.5-6L6 6v12zm8.5-6V6H17v12h-2.5z"/></svg>
-              </div>
-              <div class="knotch-ctrl-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
-              </div>
-            </div>
-          </div>
+const AppleLogo = ({ size = 12, color = '#fff' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} aria-hidden>
+    <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09ZM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25Z"/>
+  </svg>
+);
 
-          <!-- DIVIDER -->
-          <div class="knotch-divider"></div>
-
-          <!-- CALENDAR SIDE -->
-          <div class="knotch-calendar">
-            <div class="knotch-cal-header">
-              <div class="knotch-cal-month">
-                <span class="knotch-cal-month-name">Apr</span>
-                <span class="knotch-cal-year">2026</span>
-              </div>
-              <div class="knotch-cal-days">
-                <span class="knotch-cal-day-label">Sun</span>
-                <span class="knotch-cal-day-label">Mon</span>
-                <span class="knotch-cal-day-label">Tue</span>
-                <span class="knotch-cal-day-label">Wed</span>
-                <span class="knotch-cal-day-label">Thu</span>
-                <span class="knotch-cal-day-label">Fri</span>
-              </div>
-              <div class="knotch-cal-dates">
-                <span class="knotch-cal-date">19</span>
-                <span class="knotch-cal-date">20</span>
-                <span class="knotch-cal-date today">21</span>
-                <span class="knotch-cal-date">22</span>
-                <span class="knotch-cal-date">23</span>
-                <span class="knotch-cal-date">24</span>
-              </div>
-            </div>
-            <div class="knotch-cal-empty">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(255,255,255,0.3)"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
-              <div class="knotch-cal-empty-text">No events today</div>
-              <div class="knotch-cal-empty-sub">Enjoy your free time!</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SCREEN AREA -->
-      <div class="mac-screen" id="macScreen">
-        <!-- Lock screen overlay -->
-        <div class="lock-overlay" id="lockOverlay">
-          <div class="lock-album-bg"></div>
-          <div class="lock-content">
-            <div class="lock-time">9:41</div>
-            <div class="lock-date">Tuesday, April 21</div>
-            <div class="lock-album-card">
-              <div class="lock-album-art" onclick="toggleExpandedArt()" style="cursor:pointer">
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                  <path d="M16 28V15l14-3v13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="14" cy="28" r="3" fill="white"/>
-                  <circle cx="28" cy="25" r="3" fill="white"/>
-                </svg>
-              </div>
-              <div class="lock-track-info">
-                <div class="lock-track-name">Good Days</div>
-                <div class="lock-track-artist">SZA</div>
-              </div>
-              <div class="lock-ctrl-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-              </div>
-              <div class="lock-ctrl-btn lock-play">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <div class="lock-ctrl-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M6 18l8.5-6L6 6v12zm8.5-6V6H17v12h-2.5z"/></svg>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- EXPANDED ART OVERLAY -->
-        <div class="lock-expanded-art" id="lockExpandedArt">
-          <div class="lock-exp-back" onclick="toggleExpandedArt()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-            Back
-          </div>
-          <div class="lock-expanded-art-img">
-            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-              <path d="M24 42V22l21-4.5v20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="21" cy="42" r="4.5" fill="white"/>
-              <circle cx="42" cy="37.5" r="4.5" fill="white"/>
-            </svg>
-          </div>
-          <div class="lock-expanded-track">
-            <div class="lock-expanded-track-name">Good Days</div>
-            <div class="lock-expanded-track-artist">SZA</div>
-          </div>
-          <div class="lock-expanded-progress">
-            <div class="lock-expanded-bar"><div class="lock-expanded-fill"></div></div>
-            <div class="lock-expanded-times"><span>1:25</span><span>3:32</span></div>
-          </div>
-          <div class="lock-expanded-controls">
-            <div class="lock-exp-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.7)"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-            </div>
-            <div class="lock-exp-btn lock-exp-play">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-            </div>
-            <div class="lock-exp-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.7)"><path d="M6 18l8.5-6L6 6v12zm8.5-6V6H17v12h-2.5z"/></svg>
-            </div>
-          </div>
-        </div>
-
-        <div class="dock">
-          <div class="dock-icon" style="background:linear-gradient(135deg,#1a73e8,#4a9eff)"></div>
-          <div class="dock-icon" style="background:linear-gradient(135deg,#ea4335,#ff7b72)"></div>
-          <div class="dock-icon" style="background:linear-gradient(135deg,#34a853,#7de88b)"></div>
-          <div class="dock-icon" style="background:linear-gradient(135deg,#7eb8f7,#4a9eff)"></div>
-          <div class="dock-icon" style="background:rgba(255,255,255,0.1)"></div>
-          <div class="dock-icon" style="background:rgba(255,255,255,0.1)"></div>
-        </div>
-      </div>
+const MenuBar = () => (
+  <div className="menubar">
+    <div className="mb-left">
+      <div className="mb-apple"><AppleLogo size={14}/></div>
+      <div className="mb-app">Knotch</div>
     </div>
-
-    <!-- Controls below mockup -->
-    <div class="mockup-controls">
-      <p class="tap-hint" id="tapHint">↑ click the notch</p>
-      <button class="lock-trigger" onclick="toggleLock()">🔒 Lock screen</button>
+    <div className="mb-right">
+      <div className="mb-batt" title="Battery">
+        <span className="mb-batt-pct">90%</span>
+        <div className="mb-batt-shell">
+          <div className="mb-batt-fill" style={{ width: '90%' }}/>
+        </div>
+      </div>
+      <div className="mb-time">Wed 22 Apr &nbsp;22:25</div>
     </div>
   </div>
+);
+
+// The notch sits INSIDE the menubar (absolutely positioned, centered).
+const MacFrame = ({ children, notch, tall = false }) => (
+  <div className={`mac-frame ${tall ? 'mac-tall' : ''}`}>
+    <div className="mac-bezel">
+      <Wallpaper/>
+      <MenuBar/>
+      <div className="notch-slot">{notch}</div>
+      <div className="mac-content">{children}</div>
+    </div>
+  </div>
+);
+
+window.MacFrame = MacFrame;
+window.AppleLogo = AppleLogo;
+
+// Notch content states — home (music+calendar combined) and shelf.
+// Apple SF-Symbol-style iconography throughout.
+
+// ── Apple-style SF icon set (original SVG renditions, no brand lifts) ──
+const Icon = ({ name, size = 14, color = 'currentColor' }) => {
+  const p = { width: size, height: size, viewBox: '0 0 24 24', fill: color };
+  const icons = {
+    // Media
+    'play.fill':       <path d="M7 5v14l12-7z"/>,
+    'pause.fill':      <path d="M7 5h4v14H7zm6 0h4v14h-4z"/>,
+    'backward.fill':   <path d="M6 6h2v12H6zm3 6 11 6V6z"/>,
+    'forward.fill':    <path d="M4 18l11-6L4 6zM16 6h2v12h-2z"/>,
+    'shuffle':         <path fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>,
+    'laptopcomputer':  <path fill="none" stroke={color} strokeWidth="1.8" strokeLinejoin="round" d="M5 6h14v10H5zM3 18h18"/>,
+    'airplayaudio':    <path fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" d="M5 17H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-1M8 20l4-5 4 5z"/>,
+    // System
+    'bell.fill':       <path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5l-2 2v1h16v-1z"/>,
+    'calendar':        <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14z"/>,
+    'checklist':       <path fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" d="m4 7 2 2 3-3M4 13l2 2 3-3M4 19l2 2 3-3M12 8h8M12 14h8M12 20h8"/>,
+    'house.fill':      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>,
+    'tray.fill':       <path d="M19 3H5a2 2 0 0 0-2 2v11h4l2 3h6l2-3h4V5a2 2 0 0 0-2-2zm0 11h-4.13l-2 3H9.13l-2-3H5V5h14z"/>,
+    'gear':            <path d="M19.14 12.94q.06-.45.06-.94 0-.49-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7 7 0 0 0-1.62-.94l-.36-2.54A.48.48 0 0 0 13.92 2h-3.84a.47.47 0 0 0-.47.41l-.36 2.54q-.89.37-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L2.73 8.47a.47.47 0 0 0 .12.61L4.88 10.66Q4.8 11.11 4.8 12t.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32a.49.49 0 0 0 .59.22l2.39-.96q.73.57 1.62.94l.36 2.54a.48.48 0 0 0 .48.41h3.84a.49.49 0 0 0 .47-.41l.36-2.54q.89-.36 1.62-.94l2.39.96a.48.48 0 0 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/>,
+    'xmark':           <path fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" d="M6 6l12 12M18 6 6 18"/>,
+    'chevron.left':    <path fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="m14 7-5 5 5 5"/>,
+    'chevron.right':   <path fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="m10 7 5 5-5 5"/>,
+    'chevron.up':      <path fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="m7 14 5-5 5 5"/>,
+    'chevron.down':    <path fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="m7 10 5 5 5-5"/>,
+    // Status
+    'speaker.wave.2':  <path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/>,
+    'sun.max':         <g><circle cx="12" cy="12" r="4"/><g stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></g></g>,
+    'bolt.fill':       <path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66C8.48 10.94 10.42 7.54 13.01 3h1l-1 7h3.51c.49 0 .56.33.47.51C12.96 17.55 11 21 11 21z"/>,
+    'moon.fill':       <path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/>,
+    'bed.double.fill': <path d="M20 11V8a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v3H2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-7z"/>,
+    'lock.fill':       <path d="M18 8h-1V6a5 5 0 0 0-10 0v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2zM9 6a3 3 0 0 1 6 0v2H9zm3 11a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>,
+    'wifi':            <path d="M12 18a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm0-4a5 5 0 0 0-3.54 1.46l1.42 1.42a3 3 0 0 1 4.24 0l1.42-1.42A5 5 0 0 0 12 14zm0-4a9 9 0 0 0-6.36 2.64l1.42 1.42a7 7 0 0 1 9.88 0l1.42-1.42A9 9 0 0 0 12 10zm0-4a13 13 0 0 0-9.19 3.81l1.42 1.42a11 11 0 0 1 15.54 0l1.42-1.42A13 13 0 0 0 12 6z"/>,
+    'controlcenter':   <g><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></g>,
+    'switch.2':        <path d="M6 7a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM10 8h11v4H10zM18 13a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM3 14h11v4H3z"/>,
+    'magnifyingglass': <path fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" d="M10 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zM15 15l5 5"/>,
+    'spotlight':       <path fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" d="M10 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zM15 15l5 5"/>,
+    // Misc
+    'arrow.up':        <path fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M12 4v16M6 10l6-6 6 6"/>,
+    'doc':             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5z"/>,
+    'doc.text':        <g><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5z"/><path d="M8 13h8v1H8zm0 3h6v1H8z"/></g>,
+    'list.bullet':     <path d="M4 6h2v2H4zm4 0h12v2H8zM4 11h2v2H4zm4 0h12v2H8zM4 16h2v2H4zm4 0h12v2H8z"/>,
+  };
+  return <svg {...p}>{icons[name]}</svg>;
+};
+
+// ── Billie Jean album art (original illustrated cover — disco tile + silhouette) ──
+const AlbumArt = ({ size = 56 }) => (
+  <div className="album-art" style={{ width: size, height: size }}>
+    <svg viewBox="0 0 80 80" width={size} height={size} preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="mjBg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#2a1a0f"/>
+          <stop offset="60%" stopColor="#6b3a1a"/>
+          <stop offset="100%" stopColor="#c77a30"/>
+        </linearGradient>
+        <radialGradient id="mjGlow" cx="50%" cy="68%" r="60%">
+          <stop offset="0%" stopColor="#ffe4b0" stopOpacity="0.7"/>
+          <stop offset="100%" stopColor="#ffe4b0" stopOpacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="80" height="80" fill="url(#mjBg)"/>
+      <rect width="80" height="80" fill="url(#mjGlow)"/>
+      {/* Disco-floor tile grid */}
+      <g opacity="0.18" stroke="#ffe4b0" strokeWidth="0.5">
+        <path d="M0 54 L80 54 M0 62 L80 62 M0 70 L80 70 M0 78 L80 78"/>
+        <path d="M10 50 L2 80 M25 50 L20 80 M40 50 L40 80 M55 50 L60 80 M70 50 L78 80"/>
+      </g>
+      {/* Silhouette: fedora + shoulders */}
+      <g fill="#14070a">
+        <ellipse cx="40" cy="30" rx="18" ry="4"/>
+        <path d="M28 30 Q28 20 40 20 Q52 20 52 30 Z"/>
+        <path d="M22 58 Q22 44 40 44 Q58 44 58 58 L58 70 L22 70 Z"/>
+      </g>
+      {/* Sparkle on glove */}
+      <g fill="#fff">
+        <circle cx="28" cy="52" r="1.5"/>
+        <circle cx="31" cy="49" r="0.7" opacity="0.8"/>
+        <circle cx="25" cy="55" r="0.7" opacity="0.8"/>
+      </g>
+      {/* Type */}
+      <text x="40" y="14" fill="#ffe4b0" fontFamily="Georgia, serif" fontSize="5" fontStyle="italic" textAnchor="middle" opacity="0.85">Thriller</text>
+    </svg>
+  </div>
+);
+
+const PlayIcon = ({ playing, size = 18, fill = '#fff' }) =>
+  <Icon name={playing ? 'pause.fill' : 'play.fill'} size={size} color={fill}/>;
+
+// Billie Jean track data
+const TRACK = {
+  title: 'Billie Jean',
+  artist: 'Michael Jackson',
+  album: 'Thriller',
+  duration: 294, // 4:54
+};
+
+const fmtTime = (s) => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+
+// ── HOME state: Music (left) + Calendar (right), divided ───────
+const HomeState = ({ playing, onTogglePlay, progress = 0 }) => {
+  const cur = progress * TRACK.duration;
+  return (
+    <div className="state-home">
+      <div className="home-music">
+        <AlbumArt size={108}/>
+        <div className="home-music-meta">
+          <div className="home-title">{TRACK.title}</div>
+          <div className="home-artist" style={{ color: 'rgb(223, 169, 112)' }}>{TRACK.artist}</div>
+          <div className="home-progress" style={{ color: 'rgb(223, 169, 112)' }}>
+            <div className="home-progress-bar" style={{ backgroundColor: 'rgb(223, 169, 112)' }}><div className="home-progress-fill" style={{ width: `${progress * 100}%` }}/></div>
+            <div className="home-progress-times"><span>{fmtTime(cur)}</span><span>{fmtTime(TRACK.duration)}</span></div>
+          </div>
+          <div className="home-ctrls">
+            <button className="home-ctrl" onClick={(e) => e.stopPropagation()} aria-label="shuffle"><Icon name="shuffle" size={14}/></button>
+            <button className="home-ctrl" onClick={(e) => e.stopPropagation()} aria-label="previous"><Icon name="backward.fill" size={16}/></button>
+            <button className="home-ctrl home-ctrl-play" onClick={(e) => { e.stopPropagation(); onTogglePlay && onTogglePlay(); }} aria-label="play/pause"><PlayIcon playing={playing} size={18}/></button>
+            <button className="home-ctrl" onClick={(e) => e.stopPropagation()} aria-label="next"><Icon name="forward.fill" size={16}/></button>
+            <button className="home-ctrl" onClick={(e) => e.stopPropagation()} aria-label="source"><Icon name="laptopcomputer" size={16}/></button>
+          </div>
+        </div>
+      </div>
+      <div className="home-divider"/>
+      <div className="home-cal">
+        <div className="home-cal-head">
+          <div className="home-cal-month">
+            <div className="home-cal-mo">Apr</div>
+            <div className="home-cal-yr">2026</div>
+          </div>
+          <div className="home-cal-week">
+            <div className="home-cal-day"><span className="d-label">Tue</span><span className="d-num">21</span></div>
+            <div className="home-cal-day today"><span className="d-label">Wed</span><span className="d-num">22</span></div>
+            <div className="home-cal-day next"><span className="d-label">Thu</span><span className="d-num">23</span></div>
+            <div className="home-cal-day"><span className="d-label">Fri</span><span className="d-num">24</span></div>
+            <div className="home-cal-day"><span className="d-label">Sat</span><span className="d-num">25</span></div>
+          </div>
+        </div>
+        <div className="home-cal-events">
+          <div className="home-evt home-evt-reminder">
+            <div className="home-evt-check">
+              <span className="check-circle" style={{ color: 'rgb(255, 169, 0)' }}/>
+            </div>
+            <div className="home-evt-meta">
+              <div className="home-evt-title">Ship Knotch v2.0</div>
+            </div>
+            <div className="home-evt-times"><div>5:00 pm</div></div>
+          </div>
+          <div className="home-evt">
+            <div className="home-evt-bar" style={{ background: 'rgb(251, 0, 0)' }}/>
+            <div className="home-evt-meta">
+              <div className="home-evt-title">Meeting with Steve Jobs</div>
+              <div className="home-evt-sub">Location: Apple Park</div>
+            </div>
+            <div className="home-evt-times">
+              <div>9:00 am</div>
+              <div className="home-evt-end">11:00 am</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ── SHELF state ───────────────────────────────────────────────
+const ShelfState = () => (
+  <div className="state-shelf">
+    <div className="shelf-files">
+      <div className="shelf-file">
+        <div className="shelf-thumb" style={{ background: 'linear-gradient(145deg,#a06bd8,#4a2a8a)' }}/>
+        <div className="shelf-name">hero.png</div>
+      </div>
+      <div className="shelf-file">
+        <div className="shelf-thumb shelf-pdf"><Icon name="doc.text" size={20} color="#f5a4d8"/></div>
+        <div className="shelf-name">brief.pdf</div>
+      </div>
+      <div className="shelf-file">
+        <div className="shelf-thumb" style={{ background: 'linear-gradient(145deg,#5a8be0,#2a4a9f)' }}/>
+        <div className="shelf-name">notes.txt</div>
+      </div>
+      <div className="shelf-file shelf-drop">
+        <Icon name="arrow.up" size={18} color="rgba(255,255,255,0.4)"/>
+      </div>
+    </div>
+    <div className="shelf-caption">Drop files here · pick up anywhere</div>
+  </div>
+);
+
+// ── Peek: right-side cycling status (volume / brightness / battery) ──
+const PeekHud = ({ value = 0.6, kind = 'volume' }) => (
+  <div className="peek peek-hud">
+    <Icon name={kind === 'volume' ? 'speaker.wave.2' : 'sun.max'} size={13} color="#fff"/>
+    <div className="peek-track"><div className="peek-fill" style={{ width: `${value * 100}%` }}/></div>
+  </div>
+);
+
+const PeekBattery = ({ level = 0.9, charging = true }) => (
+  <div className="peek peek-batt">
+    <div className="peek-pct">{Math.round(level * 100)}%</div>
+    <div className="peek-batt-shell">
+      <div className="peek-batt-fill" style={{ width: `${level * 100}%` }}/>
+      {charging && <div className="peek-batt-bolt"><Icon name="bolt.fill" size={8} color="#0a0a0b"/></div>}
+    </div>
+  </div>
+);
+
+// ── Now-Playing live activity: left side of closed notch ──────
+const NowPlayingLive = ({ playing }) => (
+  <div className="np-live">
+    <div className="np-live-art"><AlbumArt size={18}/></div>
+    <div className="np-viz">
+      <span className={playing ? 'np-bar np-b1 playing' : 'np-bar np-b1'}/>
+      <span className={playing ? 'np-bar np-b2 playing' : 'np-bar np-b2'}/>
+      <span className={playing ? 'np-bar np-b3 playing' : 'np-bar np-b3'}/>
+      <span className={playing ? 'np-bar np-b4 playing' : 'np-bar np-b4'}/>
+    </div>
+  </div>
+);
+
+Object.assign(window, { HomeState, ShelfState, PeekHud, PeekBattery, AlbumArt, PlayIcon, Icon, NowPlayingLive, TRACK, fmtTime });
+
+// Variant A — Primary notch preview.
+// Closed notch: [NowPlayingLive] ———cam——— [rotating HUD peek]
+// Home view = combined Music + Calendar. Tabs = home, shelf.
+
+const TABS = ['home', 'shelf'];
+const PEEKS = ['volume', 'brightness', 'battery'];
+
+const KnotchA = () => {
+  const [locked, setLocked] = React.useState(true);
+  const [hover, setHover] = React.useState(false);
+  const [tab, setTab] = React.useState('home');
+  const [playing, setPlaying] = React.useState(false);
+  const [progress, setProgress] = React.useState(0);
+  const [peekIdx, setPeekIdx] = React.useState(0);
+  const [volume] = React.useState(0.6);
+  const [brightness] = React.useState(0.75);
+
+  React.useEffect(() => {
+    if (locked || hover) return;
+    const t = setInterval(() => setPeekIdx((i) => (i + 1) % PEEKS.length), 2200);
+    return () => clearInterval(t);
+  }, [locked, hover]);
+
+  React.useEffect(() => {
+    if (!playing) return;
+    const t = setInterval(() => setProgress((p) => (p >= 0.98 ? 0.05 : p + 0.006)), 400);
+    return () => clearInterval(t);
+  }, [playing]);
+
+  const expanded = !locked && hover;
+  const currentPeek = PEEKS[peekIdx];
+
+  return (
+    <MacFrame
+      tall
+      notch={
+        <div
+          className={`notch notch-a ${locked ? 'locked' : ''} ${expanded ? 'expanded' : ''}`}
+          onMouseEnter={() => !locked && setHover(true)}
+          onMouseLeave={() => setHover(false)}
+          onClick={() => locked && setLocked(false)}
+        >
+          <div className="notch-collapsed">
+            {locked ? (
+              <div className="notch-lock">
+                <Icon name="lock.fill" size={12} color="#fff"/>
+              </div>
+            ) : (
+              <>
+                <NowPlayingLive playing={playing}/>
+                <div className="notch-cam"/>
+                <div className="notch-peek-slot" key={currentPeek}>
+                  {currentPeek === 'volume' && <PeekHud value={volume} kind="volume"/>}
+                  {currentPeek === 'brightness' && <PeekHud value={brightness} kind="brightness"/>}
+                  {currentPeek === 'battery' && <PeekBattery level={0.9} charging={true}/>}
+                </div>
+              </>
+            )}
+          </div>
+
+          <div className="notch-panel">
+            <div className="panel-topbar">
+              <div className="panel-tabs">
+                {TABS.map((t) => (
+                  <button
+                    key={t}
+                    className={`panel-tab ${tab === t ? 'active' : ''}`}
+                    onClick={(e) => { e.stopPropagation(); setTab(t); }}
+                    aria-label={t}
+                  >
+                    <TabIcon kind={t}/>
+                  </button>
+                ))}
+              </div>
+              <div className="panel-top-right">
+                <button className="panel-icon-btn" onClick={(e) => e.stopPropagation()} aria-label="settings">
+                  <Icon name="gear" size={14}/>
+                </button>
+                <div className="panel-batt-chip">
+                  <span>90%</span>
+                  <div className="panel-batt-shell">
+                    <div className="panel-batt-fill" style={{ width: '90%' }}/>
+                    <div className="panel-batt-bolt"><Icon name="bolt.fill" size={7} color="#0a0a0b"/></div>
+                  </div>
+                </div>
+                <button className="panel-icon-btn" onClick={(e) => e.stopPropagation()} aria-label="collapse">
+                  <Icon name="chevron.left" size={12}/>
+                </button>
+              </div>
+            </div>
+
+            <div className="panel-body" key={tab}>
+              {tab === 'home' && <HomeState playing={playing} onTogglePlay={() => setPlaying(!playing)} progress={progress}/>}
+              {tab === 'shelf' && <ShelfState/>}
+            </div>
+          </div>
+        </div>
+      }
+    >
+      {locked
+        ? <LockContent playing={playing} onTogglePlay={() => setPlaying(!playing)} progress={progress}/>
+        : <DesktopContent onRelock={() => setLocked(true)} hintHover={!hover}/>
+      }
+    </MacFrame>
+  );
+};
+
+const TabIcon = ({ kind }) => {
+  if (kind === 'home')  return <Icon name="house.fill" size={14}/>;
+  if (kind === 'shelf') return <Icon name="tray.fill"  size={14}/>;
+  return null;
+};
+
+// ─── Lock screen with expandable Apple-Music style widget ────────────────
+const LockContent = ({ playing, onTogglePlay, progress }) => {
+  const [musicOpen, setMusicOpen] = React.useState(false);
+  const cur = (progress || 0) * TRACK.duration;
+  return (
+    <div className="lock-screen">
+      <div className="lock-date">Wed, 22 Apr</div>
+      <div className="lock-time">22:25</div>
+
+      <div className="lock-music-wrap" onClick={(e) => e.stopPropagation()}>
+        <div className={`lock-music-hero ${musicOpen ? 'visible' : ''}`} onClick={() => setMusicOpen(false)}>
+          <AlbumArt size={220}/>
+        </div>
+        <div className={`lock-music ${musicOpen ? 'expanded' : ''}`} onClick={() => setMusicOpen(!musicOpen)}>
+          <div className="lm-top">
+            <div className="lm-thumb"><AlbumArt size={32}/></div>
+            <div className="lm-meta">
+              <div className="lm-title">{TRACK.title}</div>
+              <div className="lm-artist">{TRACK.artist}</div>
+            </div>
+            <div className={`lm-viz ${playing ? 'playing' : ''}`}>
+              <span/><span/><span/><span/>
+            </div>
+          </div>
+          <div className="lm-prog-row">
+            <span>{fmtTime(cur)}</span>
+            <div className="lm-prog-bar"><div className="lm-prog-fill" style={{ width: `${(progress||0)*100}%` }}/></div>
+            <span>{fmtTime(TRACK.duration)}</span>
+          </div>
+          <div className="lm-ctrls">
+            <button className="lm-ctrl" onClick={(e) => e.stopPropagation()} aria-label="shuffle"><Icon name="shuffle" size={14}/></button>
+            <button className="lm-ctrl" onClick={(e) => e.stopPropagation()} aria-label="previous"><Icon name="backward.fill" size={16}/></button>
+            <button className="lm-ctrl" onClick={(e) => { e.stopPropagation(); onTogglePlay(); }} aria-label="play/pause"><PlayIcon playing={playing} size={18}/></button>
+            <button className="lm-ctrl" onClick={(e) => e.stopPropagation()} aria-label="next"><Icon name="forward.fill" size={16}/></button>
+            <button className="lm-ctrl" onClick={(e) => e.stopPropagation()} aria-label="source"><Icon name="laptopcomputer" size={15}/></button>
+          </div>
+        </div>
+      </div>
+      <div className="lock-hint">click the notch to unlock →</div>
+    </div>
+  );
+};
+
+const DesktopContent = ({ onRelock, hintHover }) => (
+  <div className="desktop">
+    <div className="desktop-dock">
+      <div className="dock-icon" style={{ background: 'linear-gradient(145deg,#f5a4d8,#a06bd8)' }}/>
+      <div className="dock-icon dock-k"><span>K</span></div>
+      <div className="dock-icon" style={{ background: 'rgba(255,255,255,0.12)' }}/>
+      <div className="dock-icon" style={{ background: 'rgba(255,255,255,0.12)' }}/>
+    </div>
+    {hintHover && <div className="hover-hint">↑ hover the notch</div>}
+    <button className="relock-btn" onClick={(e) => { e.stopPropagation(); onRelock(); }}>
+      <Icon name="lock.fill" size={10}/>
+      Lock
+    </button>
+  </div>
+);
+
+Object.assign(window, { KnotchA, LockContent, DesktopContent, TabIcon });
+
+    ReactDOM.createRoot(document.getElementById('knotch-preview-root')).render(<KnotchA/>);
+    </script>
 </section>
 
 <section class="features" id="features">
@@ -1075,42 +2163,7 @@
   <div>© 2026 Knotch</div>
 </footer>
 
-<script>
-  let notchOpen = false;
-  let lockVisible = false;
 
-  function toggleNotch() {
-    notchOpen = !notchOpen;
-    document.getElementById('notch').classList.toggle('expanded', notchOpen);
-    document.getElementById('knotchPanel').classList.toggle('open', notchOpen);
-    document.getElementById('tapHint').textContent = notchOpen ? '↑ click to close' : '↑ click the notch';
-  }
-
-  function toggleExpandedArt() {
-    const el = document.getElementById('lockExpandedArt');
-    el.classList.toggle('visible');
-  }
-
-  function toggleLock() {
-    lockVisible = !lockVisible;
-    document.getElementById('lockOverlay').classList.toggle('visible', lockVisible);
-    document.querySelector('.lock-trigger').textContent = lockVisible ? '🔓 Unlock' : '🔒 Lock screen';
-    // Reset expanded art on unlock
-    if (!lockVisible) document.getElementById('lockExpandedArt').classList.remove('visible');
-    // Close notch when locking
-    if (lockVisible && notchOpen) toggleNotch();
-  }
-
-  // Auto-expand on load
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      notchOpen = true;
-      document.getElementById('notch').classList.add('expanded');
-      document.getElementById('knotchPanel').classList.add('open');
-      document.getElementById('tapHint').textContent = '↑ click to close';
-    }, 800);
-  });
-</script>
 
 </body>
 </html>
