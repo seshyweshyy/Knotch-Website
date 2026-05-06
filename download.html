@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Downloading Knotch…</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0b;
+    --text: #f2f0ec;
+    --muted: rgba(242,240,236,0.45);
+    --accent: #7eb8f7;
+    --border: rgba(255,255,255,0.08);
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    text-align: center;
+    padding: 24px;
+  }
+  .logo {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    letter-spacing: -0.3px;
+    color: var(--text);
+    position: fixed;
+    top: 24px; left: 48px;
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+
+  .icon {
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #2a2a2c 0%, #0a0a0b 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 42px;
+    color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 32px rgba(0,0,0,0.5);
+  }
+
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    letter-spacing: -0.8px;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+
+  p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 340px;
+  }
+
+  .spinner {
+    width: 20px; height: 20px;
+    border: 2px solid rgba(126,184,247,0.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .status {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 24px;
+  }
+
+  .manual-link {
+    font-size: 13px;
+    color: var(--muted);
+    display: none;
+  }
+  .manual-link a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .manual-link a:hover { text-decoration: underline; }
+
+  .back {
+    position: fixed;
+    bottom: 28px;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    border-radius: 100px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .back:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="logo">K<span>notch</span></a>
+
+<div class="icon">K</div>
+
+<h1>Your download is<br><em>starting…</em></h1>
+
+<p>Fetching the latest release from GitHub. If it doesn't start in a few seconds, use the link below.</p>
+
+<div class="status" id="status">
+  <span class="spinner"></span> Finding latest release…
+</div>
+
+<div class="manual-link" id="manual">
+  <a href="#" id="manual-href">Click here to download manually →</a>
+</div>
+
+<a href="index.html" class="back">← Back to Knotch</a>
+
+<script>
+(async () => {
+  const status = document.getElementById('status');
+  const manual = document.getElementById('manual');
+  const manualHref = document.getElementById('manual-href');
+
+  const setStatus = (msg) => { status.textContent = msg; };
+  const fail = (url) => {
+    setStatus('');
+    manual.style.display = 'block';
+    if (url) {
+      manualHref.href = url;
+      manualHref.textContent = 'Click here to download manually →';
+    } else {
+      manualHref.href = 'https://github.com/seshyweshyy/Knotch/releases/latest';
+      manualHref.textContent = 'Open GitHub releases page →';
+    }
+  };
+
+  try {
+    const res = await fetch(
+      'https://api.github.com/repos/seshyweshyy/Knotch/releases/latest',
+      { headers: { Accept: 'application/vnd.github+json' } }
+    );
+
+    if (!res.ok) throw new Error('GitHub API error');
+
+    const release = await res.json();
+    const assets = release.assets || [];
+
+    // Find the first .zip asset (covers any naming convention)
+    const zip = assets.find(a => a.name.endsWith('.zip'));
+
+    if (!zip) throw new Error('No zip asset found');
+
+    const url = zip.browser_download_url;
+    setStatus(`Downloading ${zip.name}…`);
+
+    // Show manual link immediately as fallback
+    manual.style.display = 'block';
+    manualHref.href = url;
+    manualHref.textContent = `Download ${zip.name} manually →`;
+
+    // Trigger download
+    window.location.href = url;
+
+  } catch (e) {
+    fail(null);
+  }
+})();
+</script>
+
+</body>
+</html>
