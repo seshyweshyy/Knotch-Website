@@ -369,8 +369,8 @@
   .notch.s-music    { width: 290px; height: 38px; border-radius: 0 0 19px 19px; box-shadow: 0 10px 32px rgba(0,0,0,.55); }
   .notch.s-volume   { width: 300px; height: 38px; border-radius: 0 0 19px 19px; box-shadow: 0 10px 32px rgba(0,0,0,.55); }
   .notch.s-battery  { width: 264px; height: 38px; border-radius: 0 0 19px 19px; box-shadow: 0 10px 32px rgba(0,0,0,.55); }
-  .notch.s-shelf    { width: 252px; height: 38px; border-radius: 0 0 19px 19px; box-shadow: 0 10px 32px rgba(0,0,0,.55); }
-  .notch.s-expanded { width: min(400px, 84vw); height: 198px; border-radius: 0 0 28px 28px; box-shadow: 0 30px 70px rgba(0,0,0,.7); }
+  .notch.s-shelf    { width: min(580px, 92vw); height: 178px; border-radius: 0 0 30px 30px; box-shadow: 0 30px 70px rgba(0,0,0,.7); }
+  .notch.s-expanded { width: min(580px, 92vw); height: 178px; border-radius: 0 0 30px 30px; box-shadow: 0 30px 70px rgba(0,0,0,.7); }
 
   /* camera — always present, like the hardware */
   .notch-cam {
@@ -411,7 +411,7 @@
   }
 
   /* compact layouts flank the camera */
-  .st-music, .st-volume, .st-battery, .st-shelf {
+  .st-music, .st-volume, .st-battery {
     justify-content: space-between;
     padding: 0 13px;
   }
@@ -461,67 +461,139 @@
   .batt-icn { color: #4cd964; display: flex; flex-shrink: 0; }
 
   /* shelf compact */
-  .shelf-icn { color: #7eb8f7; display: flex; flex-shrink: 0; }
-  .shelf-label { font-size: 11px; font-weight: 500; color: rgba(255,255,255,.55); white-space: nowrap; }
-
-  /* ---- expanded player ---- */
-  .st-expanded {
+  /* tray view (expanded shelf) */
+  .st-shelf {
     flex-direction: column;
     align-items: stretch;
-    justify-content: flex-end;
-    padding: 38px 20px 16px;
-    gap: 13px;
+    padding: 7px 14px 14px;
+    gap: 8px;
   }
-  .xp-top { display: flex; align-items: center; gap: 13px; }
-  .xp-art {
-    width: 64px; height: 64px;
-    border-radius: 12px;
-    background: linear-gradient(145deg, #12448f, #4ea1f0);
-    box-shadow: 0 6px 24px rgba(18,68,143,.5);
-    flex-shrink: 0;
+  .tv-body { display: flex; flex: 1; gap: 10px; min-height: 0; }
+  .tv-zone {
+    border: 1.5px dashed rgba(255,255,255,.22);
+    border-radius: 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .tv-share { width: 124px; flex-shrink: 0; }
+  .tv-share-circle {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.08);
     display: flex; align-items: center; justify-content: center;
     color: rgba(255,255,255,.85);
   }
-  .xp-meta { flex: 1; min-width: 0; }
-  .xp-name {
-    font-size: 14px; font-weight: 600; color: #fff;
-    letter-spacing: -0.2px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  .tv-share-label { font-size: 11.5px; font-weight: 700; color: #fff; letter-spacing: -0.1px; }
+  .tv-drop { flex: 1; color: rgba(255,255,255,.45); gap: 8px; }
+  .tv-drop-label { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.5); }
+
+  /* ---- expanded home view ---- */
+  .st-expanded {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 7px 14px 14px;
+    gap: 6px;
   }
-  .xp-artist { font-size: 11.5px; color: rgba(255,255,255,.5); margin-top: 2px; }
-  .xp-prog {
-    height: 4px;
-    background: rgba(255,255,255,.15);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-top: 10px;
+
+  /* top row: tabs left, status right (camera sits between) */
+  .hv-top { display: flex; align-items: center; justify-content: space-between; height: 26px; }
+  .hv-tabs { display: flex; align-items: center; gap: 6px; }
+  .hv-tab {
+    width: 30px; height: 22px;
+    border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,.45);
   }
-  .xp-fill { height: 100%; width: 35%; background: rgba(255,255,255,.85); border-radius: 2px; }
-  .st-expanded.on .xp-fill { animation: prog 18s linear infinite; }
-  @keyframes prog { from { width: 35%; } to { width: 94%; } }
-  .xp-times {
-    display: flex; justify-content: space-between;
-    font-size: 9.5px; color: rgba(255,255,255,.4);
-    margin-top: 4px;
+  .hv-tab.active { background: rgba(255,255,255,.12); color: #fff; }
+  .hv-status {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,.85);
     font-variant-numeric: tabular-nums;
   }
-  .xp-ctrls { display: flex; align-items: center; justify-content: center; gap: 26px; }
-  .xp-btn {
+  .hv-gear { color: rgba(255,255,255,.75); display: flex; }
+  .hv-batt { color: #4cd964; display: flex; }
+
+  .hv-body { display: flex; flex: 1; gap: 12px; min-height: 0; }
+
+  /* music column */
+  .hv-art {
+    width: 84px; height: 84px;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #12448f, #4ea1f0);
+    box-shadow: 0 6px 24px rgba(0,0,0,.55);
+    flex-shrink: 0;
+    align-self: center;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,.9);
+  }
+  .hv-music {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 5px; padding-right: 2px;
+  }
+  .hv-name {
+    font-size: 13.5px; font-weight: 700; color: #fff; letter-spacing: -0.2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .hv-artist { font-size: 11px; color: rgba(255,255,255,.5); margin-top: -3px; }
+  .hv-prog { height: 4px; background: rgba(255,255,255,.16); border-radius: 2px; overflow: hidden; margin-top: 4px; }
+  .hv-fill { height: 100%; width: 35%; background: rgba(255,255,255,.85); border-radius: 2px; }
+  .st-expanded.on .hv-fill { animation: prog 18s linear infinite; }
+  @keyframes prog { from { width: 35%; } to { width: 94%; } }
+  .hv-times {
+    display: flex; justify-content: space-between;
+    font-size: 9px; color: rgba(255,255,255,.4);
+    font-variant-numeric: tabular-nums;
+  }
+  .hv-ctrls { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 3px; }
+  .hv-btn {
     background: none; border: none; padding: 0;
-    color: rgba(255,255,255,.7);
+    color: rgba(255,255,255,.8);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
     transition: color .15s, transform .15s;
   }
-  .xp-btn:hover { color: #fff; transform: scale(1.1); }
-  .xp-btn:active { transform: scale(.92); }
-  .xp-play {
-    width: 38px; height: 38px;
-    border-radius: 50%;
-    background: rgba(255,255,255,.14);
-    color: #fff;
+  .hv-btn:hover { color: #fff; transform: scale(1.12); }
+  .hv-btn:active { transform: scale(.9); }
+  .hv-btn.dim { color: rgba(255,255,255,.5); }
+
+  .hv-div { width: 1px; background: rgba(255,255,255,.1); margin: 4px 0; flex-shrink: 0; }
+
+  /* calendar column */
+  .hv-cal { width: 210px; flex-shrink: 0; display: flex; flex-direction: column; gap: 7px; min-height: 0; }
+  .hv-cal-head { display: flex; align-items: flex-start; gap: 10px; }
+  .hv-month { line-height: 1.05; flex-shrink: 0; }
+  .hv-month b { display: block; font-size: 15px; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
+  .hv-month span { font-size: 13px; font-weight: 300; color: rgba(255,255,255,.45); }
+  .hv-week { display: flex; gap: 0; flex: 1; justify-content: space-between; padding-top: 1px; }
+  .hv-day { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 20px; }
+  .hv-day i { font-style: normal; font-size: 8px; font-weight: 600; color: rgba(255,255,255,.4); }
+  .hv-day b { font-size: 11px; font-weight: 600; color: rgba(255,255,255,.65); width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .hv-day.today i { color: #fff; }
+  .hv-day.today b { background: #ff453a; color: #fff; font-weight: 700; }
+  .hv-events { display: flex; flex-direction: column; gap: 5px; overflow: hidden; flex: 1; min-height: 0; }
+  .hv-ev {
+    display: flex; justify-content: space-between; gap: 8px;
+    border-radius: 8px;
+    padding: 6px 8px 6px 10px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
   }
-  .xp-play:hover { background: rgba(255,255,255,.22); transform: scale(1.06); }
+  .hv-ev::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .hv-ev.ev-amber { background: rgba(231,185,76,.12); }
+  .hv-ev.ev-amber::before { background: #e7b94c; }
+  .hv-ev.ev-amber .hv-ev-title, .hv-ev.ev-amber .hv-ev-time { color: #e7c878; }
+  .hv-ev.ev-blue { background: rgba(126,184,247,.1); }
+  .hv-ev.ev-blue::before { background: #7eb8f7; }
+  .hv-ev.ev-blue .hv-ev-title, .hv-ev.ev-blue .hv-ev-time { color: #a7cdf5; }
+  .hv-ev-l { min-width: 0; }
+  .hv-ev-title { font-size: 10px; font-weight: 700; line-height: 1.25; }
+  .hv-ev-loc { font-size: 8.5px; color: rgba(255,255,255,.45); margin-top: 2px; display: flex; align-items: center; gap: 3px; }
+  .hv-ev-time { font-size: 9px; font-weight: 500; text-align: right; line-height: 1.4; flex-shrink: 0; font-variant-numeric: tabular-nums; }
 
   /* ---- trigger chips ---- */
   .demo-chips {
@@ -572,15 +644,19 @@
     .notch.s-music   { width: 240px; }
     .notch.s-volume  { width: 248px; }
     .notch.s-battery { width: 220px; }
-    .notch.s-shelf   { width: 212px; }
+    .notch.s-shelf   { width: min(340px, 90vw); height: 152px; }
+    .tv-share { width: 96px; }
     .n-spacer { width: 70px; }
+    .notch.s-expanded { width: min(340px, 90vw); height: 152px; }
+    .hv-cal, .hv-div { display: none; }
+    .hv-art { width: 72px; height: 72px; }
     .demo-screen { height: 300px; }
     .demo-menubar .mb-hide-sm { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .notch, .n-state, .n-state.on, .vol-fill, .chip { transition-duration: .01s; transition-delay: 0s; }
-    .viz i, .st-expanded.on .xp-fill { animation: none; }
+    .viz i, .st-expanded.on .hv-fill { animation: none; }
   }
 
   /* FEATURES */
@@ -829,38 +905,121 @@
           <span class="batt-pct">⚡︎ 100%</span>
         </div>
 
-        <!-- shelf -->
+        <!-- tray view -->
         <div class="n-state st-shelf" data-st="shelf">
-          <span class="shelf-icn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
-          </span>
-          <div class="n-spacer"></div>
-          <span class="shelf-label">Drop to stash</span>
-        </div>
-
-        <!-- expanded player -->
-        <div class="n-state st-expanded" data-st="expanded">
-          <div class="xp-top">
-            <div class="xp-art">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          <div class="hv-top">
+            <div class="hv-tabs">
+              <span class="hv-tab">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+              </span>
+              <span class="hv-tab active">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8"/><path d="M1 3h22v5H1z"/></svg>
+              </span>
             </div>
-            <div class="xp-meta">
-              <div class="xp-name">Midnight City</div>
-              <div class="xp-artist">M83 — Hurry Up, We're Dreaming</div>
-              <div class="xp-prog"><div class="xp-fill"></div></div>
-              <div class="xp-times"><span>1:42</span><span>−2:21</span></div>
+            <div class="hv-status">
+              <span class="hv-gear">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </span>
+              <span>90%</span>
+              <span class="hv-batt">
+                <svg width="22" height="13" viewBox="0 0 26 14" fill="none"><rect x="1" y="1" width="21" height="12" rx="3.5" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="3" width="15.5" height="8" rx="2" fill="currentColor"/><path d="M24 5v4c1.1-.3 1.8-1 1.8-2S25.1 5.3 24 5z" fill="currentColor"/><path d="M12.5 3.5 10 7.3h1.8L10.6 10.5 14 6.4h-1.9l.4-2.9z" fill="#000"/></svg>
+              </span>
             </div>
           </div>
-          <div class="xp-ctrls">
-            <button class="xp-btn" aria-label="Previous">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 20 9 12l10-8v16zM7 4H5v16h2V4z"/></svg>
-            </button>
-            <button class="xp-btn xp-play" aria-label="Pause">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
-            </button>
-            <button class="xp-btn" aria-label="Next">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 4l10 8-10 8V4zM17 4h2v16h-2V4z"/></svg>
-            </button>
+          <div class="tv-body">
+            <div class="tv-zone tv-share">
+              <div class="tv-share-circle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 6.5 4-3.5 4 3.5"/><path d="M7 11H5.5A1.5 1.5 0 0 0 4 12.5v7A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5H17"/></svg>
+              </div>
+              <div class="tv-share-label">Share Menu</div>
+            </div>
+            <div class="tv-zone tv-drop">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v9"/><path d="m8.5 9 3.5 3.5L15.5 9"/><path d="M3 13.5h4l1.5 2.5h7l1.5-2.5h4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5.5z"/></svg>
+              <div class="tv-drop-label">Drop files here</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- expanded home view -->
+        <div class="n-state st-expanded" data-st="expanded">
+          <div class="hv-top">
+            <div class="hv-tabs">
+              <span class="hv-tab active">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+              </span>
+              <span class="hv-tab">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8"/><path d="M1 3h22v5H1z"/></svg>
+              </span>
+            </div>
+            <div class="hv-status">
+              <span class="hv-gear">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </span>
+              <span>90%</span>
+              <span class="hv-batt">
+                <svg width="22" height="13" viewBox="0 0 26 14" fill="none"><rect x="1" y="1" width="21" height="12" rx="3.5" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="3" width="15.5" height="8" rx="2" fill="currentColor"/><path d="M24 5v4c1.1-.3 1.8-1 1.8-2S25.1 5.3 24 5z" fill="currentColor"/><path d="M12.5 3.5 10 7.3h1.8L10.6 10.5 14 6.4h-1.9l.4-2.9z" fill="#000"/></svg>
+              </span>
+            </div>
+          </div>
+          <div class="hv-body">
+            <div class="hv-art">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <div class="hv-music">
+              <div class="hv-name">Midnight City</div>
+              <div class="hv-artist">M83</div>
+              <div class="hv-prog"><div class="hv-fill"></div></div>
+              <div class="hv-times"><span>1:42</span><span>4:03</span></div>
+              <div class="hv-ctrls">
+                <button class="hv-btn dim" aria-label="Shuffle">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="m15 15 6 6"/><path d="M4 4l5 5"/></svg>
+                </button>
+                <button class="hv-btn" aria-label="Previous">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M11 20 2.5 12 11 4v16zM21 20l-8.5-8L21 4v16z"/></svg>
+                </button>
+                <button class="hv-btn" aria-label="Play">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6 3.5 21 12 6 20.5v-17z"/></svg>
+                </button>
+                <button class="hv-btn" aria-label="Next">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M13 4l8.5 8-8.5 8V4zM3 4l8.5 8L3 20V4z"/></svg>
+                </button>
+                <button class="hv-btn dim" aria-label="Output device">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="11" rx="1.5"/><path d="M1.5 19h21"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="hv-div"></div>
+            <div class="hv-cal">
+              <div class="hv-cal-head">
+                <div class="hv-month"><b>Jun</b><span>2026</span></div>
+                <div class="hv-week">
+                  <div class="hv-day"><i>M</i><b>8</b></div>
+                  <div class="hv-day"><i>Tu</i><b>9</b></div>
+                  <div class="hv-day today"><i>W</i><b>10</b></div>
+                  <div class="hv-day"><i>Th</i><b>11</b></div>
+                  <div class="hv-day"><i>F</i><b>12</b></div>
+                  <div class="hv-day"><i>Sa</i><b>13</b></div>
+                </div>
+              </div>
+              <div class="hv-events">
+                <div class="hv-ev ev-amber">
+                  <div class="hv-ev-l">
+                    <div class="hv-ev-title">Meeting with Tim Cook</div>
+                    <div class="hv-ev-loc">
+                      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+                      Apple Park
+                    </div>
+                  </div>
+                  <div class="hv-ev-time">9:45 am<br>10:30 am</div>
+                </div>
+                <div class="hv-ev ev-blue">
+                  <div class="hv-ev-l">
+                    <div class="hv-ev-title">Ship Knotch 2.0</div>
+                  </div>
+                  <div class="hv-ev-time">11:00 am</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -871,10 +1030,10 @@
     <div class="demo-chips">
       <span class="demo-hint">Try it →</span>
       <button class="chip" data-go="music">Now Playing</button>
-      <button class="chip" data-go="expanded">Player</button>
+      <button class="chip" data-go="expanded">Home view</button>
+      <button class="chip" data-go="shelf">Tray view</button>
       <button class="chip" data-go="volume">Volume HUD</button>
       <button class="chip" data-go="battery">Charging</button>
-      <button class="chip" data-go="shelf">Shelf</button>
     </div>
   </div>
 
@@ -970,7 +1129,7 @@
   }
 
   // auto demo loop — pauses on interaction, resumes after 9s
-  var cycle = ['music', 'expanded', 'music', 'volume', 'idle', 'battery', 'music', 'shelf'];
+  var cycle = ['music', 'expanded', 'shelf', 'music', 'volume', 'battery', 'idle'];
   var ci = 0, timer = null, resumeT = null, visible = true;
 
   function tick() { setState(cycle[ci % cycle.length]); ci++; }
