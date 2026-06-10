@@ -11,6 +11,17 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+  /* smooth in-page scrolling (offset clears the fixed nav) */
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+
+  /* smooth cross-fade between pages (View Transitions, progressive enhancement) */
+  @view-transition { navigation: auto; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    @view-transition { navigation: none; }
+  }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   /* SF Pro / system font stack — renders as actual SF on macOS */
