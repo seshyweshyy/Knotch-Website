@@ -33,6 +33,8 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html { overflow-x: hidden; }
+
 body {
   background: var(--canvas);
   color: var(--ink);
@@ -42,6 +44,7 @@ body {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 ::selection { background: rgba(51, 128, 255, 0.35); }
@@ -146,7 +149,7 @@ body.menu-open { overflow: hidden; }
 }
 .stage-glow {
   position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 120vw; height: 70vh;
+  width: 100vw; height: 70vh;
   background:
     radial-gradient(ellipse 42% 48% at 45% 32%, rgba(51, 128, 255, 0.14), transparent 68%),
     radial-gradient(ellipse 40% 44% at 58% 28%, rgba(30, 90, 214, 0.12), transparent 66%);
@@ -242,7 +245,7 @@ h1 {
   border: 1px solid var(--card-edge);
   border-radius: 18px;
   padding: 20px 24px;
-  max-width: 540px;
+  max-width: min(540px, 100%);
   animation: rise 1s var(--ease-apple) 0.58s both;
 }
 .dl-note-title {
