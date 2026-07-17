@@ -3,551 +3,556 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Knotch Privacy Policy — we collect nothing, period.">
 <title>Privacy Policy — Knotch</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="images/icon.png">
+<meta name="description" content="Knotch is a local macOS utility. It has no servers, no accounts, and no telemetry. Your data never leaves your machine.">
 <style>
-  /* smooth cross-fade between pages (View Transitions, progressive enhancement) */
-  @view-transition { navigation: auto; }
+/* Knotch design system — shared tokens (matches index.html) */
+:root {
+  --ink: #f5f5f7;
+  --mute: #86868b;
+  --faint: #515154;
+  --canvas: #000000;
+  --panel: #0b0b0d;
+  --card: #111113;
+  --card-edge: rgba(255, 255, 255, 0.065);
+  --blue: #4c86ff;
+  --blue-deep: #2e6be8;
+  --glass: rgba(18, 18, 20, 0.72);
+  --grad: linear-gradient(96deg, #6fa0ff 0%, #3380ff 55%, #1e5ad6 100%);
+  --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
+  --ease-spring: cubic-bezier(0.32, 1.35, 0.42, 1);
+}
 
-  @media (prefers-reduced-motion: reduce) {
-    @view-transition { navigation: none; }
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
 
-  :root {
-    --bg: #0a0a0b;
-    --surface: #111113;
-    --surface2: #18181c;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.14);
-    --text: #f2f0ec;
-    --muted: rgba(242,240,236,0.45);
-    --accent: #7eb8f7;
-    --accent-glow: rgba(126,184,247,0.08);
-  }
+::selection { background: rgba(51, 128, 255, 0.35); }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+.headline {
+  font-size: clamp(38px, 6.4vw, 72px);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+.subhead {
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.45;
+  color: var(--mute);
+}
+.eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
-  /* NAV — identical to index.html */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 48px;
-    background: rgba(10,10,11,0.7);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-  .logo {
-    font-family: 'Instrument Serif', serif;
-    font-size: 22px;
-    letter-spacing: -0.3px;
-    color: var(--text);
-    text-decoration: none;
-  }
-  .logo span { color: var(--accent); }
-  nav a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 400;
-    transition: color 0.2s;
-  }
-  nav a:hover { color: var(--text); }
-  .nav-links { display: flex; gap: 32px; align-items: center; }
-  .btn-download {
-    background: var(--accent);
-    color: #04111f;
-    border: none;
-    padding: 9px 20px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 500;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s;
-    text-decoration: none;
-  }
-  .btn-download:hover { opacity: 0.88; transform: scale(0.98); }
+/* Nav */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 130;
+  height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--glass);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nav-inner {
+  width: min(1024px, 92vw);
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.nav-mark {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 17px; font-weight: 600; letter-spacing: -0.01em;
+  color: var(--ink); text-decoration: none;
+  transition: opacity 0.25s var(--ease-apple);
+}
+.nav-mark:hover { opacity: 0.75; }
+.nav-app-icon {
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.nav-links { display: flex; align-items: center; gap: 30px; }
+.nav-links a {
+  font-size: 13px; color: rgba(245, 245, 247, 0.8);
+  text-decoration: none; letter-spacing: -0.01em;
+  transition: color 0.25s var(--ease-apple);
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.current { color: var(--ink); }
+.nav-cta {
+  font-size: 13px; font-weight: 500; color: #fff;
+  background: var(--blue-deep);
+  border-radius: 980px; padding: 6px 15px;
+  text-decoration: none;
+  transition: background 0.25s var(--ease-apple);
+}
+.nav-cta:hover { background: #3d7dff; }
+@media (max-width: 700px) { .nav-links a:not(.nav-cta) { display: none; } }
 
-  /* PAGE LAYOUT */
-  .page {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 148px 24px 100px;
-  }
+/* Page hero */
+.page-hero {
+  padding: 170px 6vw 70px;
+  text-align: center;
+  position: relative;
+}
+.hero-glow {
+  position: absolute; top: -30%; left: 50%; transform: translateX(-50%);
+  width: 120vw; height: 60vh;
+  background:
+    radial-gradient(ellipse 44% 50% at 45% 35%, rgba(51, 128, 255, 0.13), transparent 68%),
+    radial-gradient(ellipse 40% 46% at 58% 30%, rgba(30, 90, 214, 0.12), transparent 66%);
+  pointer-events: none;
+  filter: blur(6px);
+}
+.page-hero .eyebrow { margin-bottom: 20px; animation: rise 1s var(--ease-apple) 0.1s both; }
+.page-hero h1 { animation: rise 1s var(--ease-apple) 0.22s both; position: relative; }
+.page-hero .subhead {
+  max-width: 46ch; margin: 20px auto 0;
+  animation: rise 1s var(--ease-apple) 0.36s both;
+  position: relative;
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-  /* HERO */
-  .policy-hero {
-    margin-bottom: 64px;
-  }
-  .tag {
-    display: inline-block;
-    border: 1px solid rgba(126,184,247,0.25);
-    border-radius: 100px;
-    padding: 5px 14px;
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--accent);
-    letter-spacing: 0.04em;
-    margin-bottom: 28px;
-    text-transform: uppercase;
-    background: rgba(126,184,247,0.06);
-  }
-  .policy-hero h1 {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(40px, 7vw, 68px);
-    line-height: 1.0;
-    letter-spacing: -2px;
-    margin-bottom: 20px;
-  }
-  .policy-hero h1 em { font-style: italic; color: var(--accent); }
-  .policy-hero p {
-    font-size: 16px;
-    color: var(--muted);
-    line-height: 1.65;
-    max-width: 520px;
-  }
+/* Layout */
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 6vw 120px;
+}
 
-  /* TLDR CARD */
-  .tldr-card {
-    background: var(--surface);
-    border: 1px solid rgba(126,184,247,0.2);
-    border-radius: 20px;
-    padding: 32px 36px;
-    margin-bottom: 60px;
-    position: relative;
-    overflow: hidden;
-  }
-  .tldr-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  }
-  .tldr-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .tldr-badge {
-    background: rgba(126,184,247,0.12);
-    border: 1px solid rgba(126,184,247,0.25);
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    padding: 3px 10px;
-    border-radius: 100px;
-    text-transform: uppercase;
-  }
-  .tldr-header-text {
-    font-family: 'Instrument Serif', serif;
-    font-size: 22px;
-    letter-spacing: -0.5px;
-  }
-  .tldr-items {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .tldr-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    font-size: 14px;
-    color: var(--text);
-    line-height: 1.5;
-  }
-  .tldr-check {
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    background: rgba(126,184,247,0.1);
-    border: 1px solid var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-  .tldr-check svg { display: block; }
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.9s var(--ease-apple), transform 0.9s var(--ease-apple);
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
 
-  /* DIVIDER */
-  .section-divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 48px 0;
-  }
+/* TL;DR card */
+.tldr-card {
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: 28px;
+  padding: 30px 32px;
+  margin-top: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.tldr-card::before {
+  content: "";
+  position: absolute; inset: -60% -20% auto -20%;
+  height: 120%;
+  background: radial-gradient(50% 55% at 50% 0%, rgba(51, 128, 255, 0.12), transparent 70%);
+  pointer-events: none;
+}
+.tldr-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 22px;
+  position: relative;
+}
+.tldr-badge {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  color: #fff;
+  background: var(--grad);
+  border-radius: 980px;
+  padding: 5px 12px;
+}
+.tldr-header-text { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
 
-  /* POLICY SECTIONS */
-  .policy-section {
-    margin-bottom: 52px;
-  }
-  .policy-section h2 {
-    font-family: 'Instrument Serif', serif;
-    font-size: 26px;
-    letter-spacing: -0.5px;
-    margin-bottom: 14px;
-    color: var(--text);
-  }
-  .policy-section p {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.75;
-    margin-bottom: 12px;
-  }
-  .policy-section p:last-child { margin-bottom: 0; }
-  .policy-section a {
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(126,184,247,0.25);
-    transition: border-color 0.2s;
-  }
-  .policy-section a:hover { border-color: var(--accent); }
+.tldr-items {
+  display: flex; flex-direction: column; gap: 14px;
+  position: relative;
+}
+.tldr-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 14.5px; line-height: 1.5; color: var(--mute);
+}
+.tldr-check {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(76, 134, 255, 0.16);
+  border: 1px solid rgba(76, 134, 255, 0.3);
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
 
-  /* INLINE HIGHLIGHT */
-  .inline-note {
-    display: inline-block;
-    background: rgba(126,184,247,0.07);
-    border: 1px solid rgba(126,184,247,0.18);
-    border-radius: 6px;
-    padding: 0 6px;
-    font-size: 13px;
-    color: var(--accent);
-    font-weight: 400;
-  }
+/* Policy sections */
+.policy-section { margin-top: 58px; }
+.policy-section h2 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  margin-bottom: 14px;
+}
+.policy-section p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--mute);
+}
+.policy-section p + p { margin-top: 14px; }
+.policy-section a { color: var(--blue); text-decoration: none; }
+.policy-section a:hover { text-decoration: underline; }
 
-  /* CONTACT CARD */
-  .contact-card {
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 16px;
-    padding: 28px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    flex-wrap: wrap;
-    margin-top: 60px;
-  }
-  .contact-card-text h3 {
-    font-family: 'Instrument Serif', serif;
-    font-size: 20px;
-    letter-spacing: -0.3px;
-    margin-bottom: 4px;
-  }
-  .contact-card-text p {
-    font-size: 13px;
-    color: var(--muted);
-  }
-  .btn-contact {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border2);
-    padding: 10px 22px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 400;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-  .btn-contact:hover {
-    color: var(--text);
-    border-color: rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.05);
-  }
+.inline-note {
+  font-family: "SF Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.86em;
+  color: #9fd0ff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
 
-  /* DATE */
-  .policy-date {
-    font-size: 12px;
-    color: rgba(242,240,236,0.3);
-    margin-top: 48px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border);
-  }
+/* Contact card */
+.contact-card {
+  margin-top: 72px;
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: 28px;
+  padding: 34px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+.contact-card::before {
+  content: "";
+  position: absolute; inset: auto -20% -70% -20%;
+  height: 120%;
+  background: radial-gradient(50% 60% at 50% 100%, rgba(51, 128, 255, 0.14), transparent 70%);
+  pointer-events: none;
+}
+.contact-card h3 {
+  font-size: 22px; font-weight: 700; letter-spacing: -0.015em;
+  margin-bottom: 6px;
+}
+.contact-card p { font-size: 14.5px; color: var(--mute); max-width: 40ch; }
 
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 36px 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: var(--muted);
-    font-size: 13px;
-  }
-  footer a { color: var(--muted); text-decoration: none; }
-  footer a:hover { color: var(--text); }
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  border: none; cursor: pointer;
+  font-family: inherit; font-size: 15px; font-weight: 500;
+  letter-spacing: -0.01em;
+  border-radius: 980px; padding: 12px 22px;
+  text-decoration: none;
+  transition: transform 0.35s var(--ease-spring), background 0.3s var(--ease-apple);
+  position: relative;
+}
+.btn:active { transform: scale(0.96); }
+.btn-fill {
+  color: #fff; background: var(--blue-deep);
+  box-shadow: 0 8px 26px rgba(46, 107, 232, 0.35);
+}
+.btn-fill:hover { background: #3d7dff; transform: translateY(-1px); }
 
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .policy-hero { animation: fadeUp 0.6s ease both 0.05s; }
-  .tldr-card   { animation: fadeUp 0.6s ease both 0.15s; }
-  .policy-section { animation: fadeUp 0.5s ease both 0.22s; }
+.policy-date {
+  margin-top: 44px;
+  font-size: 12.5px;
+  color: var(--faint);
+  text-align: center;
+}
+
+/* Footer */
+footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 34px 6vw 50px;
+  font-size: 12px;
+  color: var(--mute);
+}
+.foot-inner {
+  max-width: 1024px; margin: 0 auto;
+  display: flex; flex-wrap: wrap; justify-content: space-between;
+  gap: 18px; line-height: 1.8;
+}
+.foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
+.foot-links a {
+  color: var(--mute); text-decoration: none;
+  transition: color 0.25s var(--ease-apple);
+}
+.foot-links a:hover { color: var(--ink); }
+.foot-fine { max-width: 62ch; color: var(--faint); }
 
 
-  /* HAMBURGER + MOBILE MENU */
-  .nav-burger {
-    display: none;
-    width: 38px; height: 38px;
-    align-items: center; justify-content: center;
-    flex-direction: column;
-    gap: 5px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--border2);
-    border-radius: 50%;
-    cursor: pointer;
-    padding: 0;
-    flex-shrink: 0;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .nav-burger span {
-    display: block;
-    width: 15px; height: 1.6px;
-    background: var(--text);
-    border-radius: 2px;
-    transition: transform .35s cubic-bezier(.33,1.27,.35,1), opacity .2s;
-  }
-  .nav-burger.open span:nth-child(1) { transform: translateY(3.3px) rotate(45deg); }
-  .nav-burger.open span:nth-child(2) { transform: translateY(-3.3px) rotate(-45deg); }
+/* ---------- Mobile menu (Apple-style) ---------- */
 
-  .mobile-menu {
-    position: fixed;
-    top: 68px; left: 12px; right: 12px;
-    z-index: 99;
-    display: flex;
-    flex-direction: column;
-    background: rgba(16,16,19,0.92);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--border2);
-    border-radius: 18px;
-    padding: 8px;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
-    opacity: 0;
-    transform: translateY(-10px) scale(0.97);
-    transform-origin: top center;
-    visibility: hidden;
-    pointer-events: none;
-    transition:
-      opacity .25s ease,
-      transform .45s cubic-bezier(.33,1.27,.35,1),
-      visibility 0s linear .25s;
-  }
-  .mobile-menu.open {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    visibility: visible;
-    pointer-events: auto;
-    transition:
-      opacity .25s ease,
-      transform .45s cubic-bezier(.33,1.27,.35,1),
-      visibility 0s;
-  }
-  .mobile-menu a {
-    color: var(--text);
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 400;
-    padding: 13px 16px;
-    border-radius: 12px;
-    transition: background .15s;
-  }
-  .mobile-menu a:active, .mobile-menu a:hover { background: rgba(255,255,255,0.06); }
-  .mobile-menu a + a { border-top: 1px solid var(--border); }
+.nav-burger {
+  display: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 40px; height: 40px;
+  margin-right: -8px;
+  position: relative;
+  z-index: 120;
+  flex-shrink: 0;
+}
+.nav-burger span {
+  position: absolute; left: 11px; right: 11px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: var(--ink);
+  transition: transform 0.45s var(--ease-apple), top 0.45s var(--ease-apple);
+}
+.nav-burger span:nth-child(1) { top: 16.5px; }
+.nav-burger span:nth-child(2) { top: 23.5px; }
+body.menu-open .nav-burger span:nth-child(1) { top: 20px; transform: rotate(45deg); }
+body.menu-open .nav-burger span:nth-child(2) { top: 20px; transform: rotate(-45deg); }
 
-  @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    .nav-links a:not(.btn-download) { display: none; }
-    .nav-burger { display: flex; }
-    footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
-    .tldr-card { padding: 24px 22px; }
-    .contact-card { flex-direction: column; align-items: flex-start; }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(8, 8, 10, 0.82);
+  -webkit-backdrop-filter: saturate(180%) blur(26px);
+  backdrop-filter: saturate(180%) blur(26px);
+  padding: 108px 9vw 40px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s var(--ease-apple), visibility 0s linear 0.45s;
+}
+body.menu-open .mobile-menu {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.45s var(--ease-apple), visibility 0s;
+}
+.mobile-menu a {
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s var(--ease-apple), transform 0.5s var(--ease-apple);
+}
+.mobile-menu a:active { color: var(--blue); }
+body.menu-open .mobile-menu a { opacity: 1; transform: translateY(0); }
+body.menu-open .mobile-menu a:nth-child(1) { transition-delay: 0.06s; }
+body.menu-open .mobile-menu a:nth-child(2) { transition-delay: 0.11s; }
+body.menu-open .mobile-menu a:nth-child(3) { transition-delay: 0.16s; }
+body.menu-open .mobile-menu a:nth-child(4) { transition-delay: 0.21s; }
+body.menu-open .mobile-menu a:nth-child(5) { transition-delay: 0.26s; }
+body.menu-open .mobile-menu a:nth-child(6) { transition-delay: 0.31s; }
+body.menu-open { overflow: hidden; }
+
+@media (max-width: 700px) { .nav-burger { display: block; } }
+@media (min-width: 701px) { .mobile-menu { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; }
+}
 </style>
 </head>
 <body>
- 
+
 <nav>
-  <a href="index.html" class="logo">K<span>notch</span></a>
-  <div class="nav-links">
-    <a href="index.html#features">Features</a>
-    <a href="index.html#pricing">Pricing</a>
-    <a href="faq.html">FAQ</a>
-    <a href="privacy.html" style="color: var(--text);">Privacy</a>
-    <a href="download.html" class="btn-download">Download free →</a>
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html" aria-label="Knotch home">
+      <img class="nav-app-icon" src="images/icon.png" alt="" aria-hidden="true">
+      Knotch
+    </a>
+    <div class="nav-links">
+      <a href="index.html#music">Music</a>
+      <a href="index.html#features">Features</a>
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html" class="current">Privacy</a>
+      <a class="nav-cta" href="index.html#download">Download</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span>
+    </button>
   </div>
-  <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-    <span></span><span></span>
-  </button>
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a href="index.html#features">Features</a>
-  <a href="index.html#pricing">Pricing</a>
+  <a href="index.html">Overview</a>
   <a href="faq.html">FAQ</a>
   <a href="privacy.html">Privacy</a>
+  <a href="index.html#download">Download</a>
 </div>
+
+<header class="page-hero">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <p class="eyebrow">Privacy Policy</p>
+  <h1 class="headline">We collect<br><span class="grad-text">nothing.</span></h1>
+  <p class="subhead">Knotch is a local macOS utility. It has no servers, no accounts, and no telemetry. Your data never leaves your machine.</p>
+</header>
 
 <main class="page">
 
-  <div class="policy-hero">
-    <div class="tag">Privacy Policy</div>
-    <h1>We collect<br><em>nothing.</em></h1>
-    <p>Knotch is a local macOS utility. It has no servers, no accounts, and no telemetry. Your data never leaves your machine.</p>
-  </div>
-
-  <div class="tldr-card">
+  <div class="tldr-card reveal">
     <div class="tldr-header">
       <div class="tldr-badge">TL;DR</div>
       <div class="tldr-header-text">The short version</div>
     </div>
     <div class="tldr-items">
       <div class="tldr-item">
-        <div class="tldr-check">
-          <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#7eb8f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+        <div class="tldr-check"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#6fa0ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         Knotch collects zero personal data, usage analytics, or crash reports.
       </div>
       <div class="tldr-item">
-        <div class="tldr-check">
-          <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#7eb8f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+        <div class="tldr-check"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#6fa0ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         No account required, ever. No email, no sign-up.
       </div>
       <div class="tldr-item">
-        <div class="tldr-check">
-          <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#7eb8f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+        <div class="tldr-check"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#6fa0ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         All app preferences are stored locally using macOS UserDefaults.
       </div>
       <div class="tldr-item">
-        <div class="tldr-check">
-          <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#7eb8f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+        <div class="tldr-check"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#6fa0ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         Music metadata is read locally from Spotify or Apple Music — never transmitted.
       </div>
       <div class="tldr-item">
-        <div class="tldr-check">
-          <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#7eb8f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+        <div class="tldr-check"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#6fa0ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         This website has no trackers, no cookies, and no analytics scripts.
       </div>
     </div>
   </div>
 
-  <hr class="section-divider">
-
-  <div class="policy-section">
+  <div class="policy-section reveal">
     <h2>What Knotch does</h2>
     <p>Knotch is a native macOS application that extends the MacBook notch with music controls, a calendar view, a file shelf, and system HUD overlays. All of this happens entirely on your device.</p>
     <p>The app communicates with Spotify via the local <span class="inline-note">AppleScript / SpotifyAPI</span> bridge and with Apple Music via <span class="inline-note">MusicKit</span> — both are device-local APIs. No playback data, track history, or metadata is transmitted to any external server.</p>
   </div>
 
-  <div class="policy-section">
+  <div class="policy-section reveal">
     <h2>Data we do not collect</h2>
     <p>To be unambiguous: Knotch does not collect, store, transmit, or process any of the following:</p>
     <p>Personal identifiers (name, email, IP address) · usage analytics · crash reports or diagnostics · music listening history · calendar event content · file names or contents from the shelf · device identifiers · location data.</p>
     <p>There is no telemetry SDK included in the app bundle. You can verify this yourself — the full source code is available on <a href="https://github.com/seshyweshyy/Knotch" target="_blank" rel="noopener">GitHub</a>.</p>
   </div>
 
-  <div class="policy-section">
+  <div class="policy-section reveal">
     <h2>Local storage</h2>
     <p>Knotch stores your preferences (e.g. which widgets are enabled, layout settings) using macOS <span class="inline-note">UserDefaults</span>. This data lives in your macOS user account and is never read by or synced to any remote service.</p>
   </div>
 
-  <div class="policy-section">
+  <div class="policy-section reveal">
     <h2>This website</h2>
-    <p>The Knotch landing page is a static HTML file served from GitHub Pages. It uses no cookies, no tracking pixels, no analytics (Google Analytics, Plausible, etc.), and no third-party scripts beyond the Google Fonts stylesheet and the React/Babel CDN bundles used to render the interactive demo.</p>
+    <p>The Knotch landing page is a static HTML file served from GitHub Pages. It uses no cookies, no tracking pixels, no analytics (Google Analytics, Plausible, etc.), and no third-party scripts.</p>
     <p>If you download Knotch using the button on this page, the download is served directly from GitHub Releases. GitHub may log standard server access information per their own <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">privacy statement</a>.</p>
   </div>
 
-  <div class="policy-section">
+  <div class="policy-section reveal">
     <h2>Third-party services</h2>
     <p>Knotch integrates with services you already have on your Mac. If you use Spotify or Apple Music, those services' own privacy policies govern how they handle your data — Knotch merely reads what they expose locally.</p>
     <p>Calendar data is read via <span class="inline-note">EventKit</span> (macOS system framework) and is never stored by Knotch or transmitted anywhere.</p>
   </div>
 
-  <div class="policy-section">
+  <div class="policy-section reveal">
     <h2>Open source</h2>
     <p>Knotch is open source. Every privacy claim on this page is verifiable by reading the code at <a href="https://github.com/seshyweshyy/Knotch" target="_blank" rel="noopener">github.com/seshyweshyy/Knotch</a>. If you spot anything that contradicts this policy, please open an issue or email us — we'll fix it immediately.</p>
   </div>
 
-  <div class="policy-section">
+  <div class="policy-section reveal">
     <h2>Changes to this policy</h2>
     <p>If this policy ever changes, the updated version will be published here with a new effective date. Because we collect no data, there is no retroactive impact on you — future changes would only affect future behaviour of the app.</p>
   </div>
 
-  <div class="contact-card">
-    <div class="contact-card-text">
+  <div class="contact-card reveal">
+    <div>
       <h3>Questions?</h3>
       <p>Reach out any time — we're a one-person project and we read everything.</p>
     </div>
-    <a href="mailto:seshyweshyy@gmail.com" class="btn-contact">seshyweshyy@gmail.com →</a>
+    <a class="btn btn-fill" href="mailto:seshyweshyy@gmail.com">seshyweshyy@gmail.com</a>
   </div>
 
-  <div class="policy-date">Effective date: 27 April 2026</div>
+  <p class="policy-date reveal">Effective date: 27 April 2026</p>
 
 </main>
 
 <footer>
-  <a href="index.html" class="logo" style="font-size: 17px; font-family: 'Instrument Serif', serif;">K<span style="color: var(--accent);">notch</span></a>
-  <div style="display: flex; gap: 24px;">
-    <a href="privacy.html" style="color: var(--text);">Privacy</a>
-    <a href="https://github.com/seshyweshyy/Knotch">GitHub</a>
-    <a href="mailto:seshyweshyy@gmail.com">Contact</a>
+  <div class="foot-inner">
+    <p class="foot-fine">
+      Knotch is an independent, open-source adaptation of boring.notch, licensed under GPLv3.
+      Not affiliated with Apple Inc.
+    </p>
+    <div>
+      <div class="foot-links">
+        <a href="index.html">Overview</a>
+        <a href="faq.html">FAQ</a>
+        <a href="https://github.com/seshyweshyy/Knotch">GitHub</a>
+        <a href="https://github.com/seshyweshyy/Knotch/releases">Releases</a>
+        <a href="https://seshyweshyy.com">seshyweshyy.com</a>
+      </div>
+      <p style="margin-top:10px; color:var(--faint);">© 2026 seshyweshyy. Made in Sydney.</p>
+    </div>
   </div>
-  <div>© 2026 Knotch</div>
 </footer>
 
 <script>
 (function () {
-  var burger = document.getElementById('navBurger');
-  var menu = document.getElementById('mobileMenu');
-  if (!burger || !menu) return;
-
-  function setOpen(open) {
-    burger.classList.toggle('open', open);
-    menu.classList.toggle('open', open);
-    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var revealEls = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -4% 0px" });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add("in"); });
   }
-  function isOpen() { return menu.classList.contains('open'); }
 
-  burger.addEventListener('click', function (e) {
-    e.stopPropagation();
-    setOpen(!isOpen());
+  /* ---------- Mobile menu ---------- */
+  var burger = document.getElementById("navBurger");
+  var mobileMenu = document.getElementById("mobileMenu");
+  function setMenu(open) {
+    document.body.classList.toggle("menu-open", open);
+    burger.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  burger.addEventListener("click", function () {
+    setMenu(!document.body.classList.contains("menu-open"));
   });
-  menu.querySelectorAll('a').forEach(function (a) {
-    a.addEventListener('click', function () { setOpen(false); });
+  mobileMenu.querySelectorAll("a").forEach(function (a) {
+    a.addEventListener("click", function () { setMenu(false); });
   });
-  document.addEventListener('click', function (e) {
-    if (isOpen() && !menu.contains(e.target)) setOpen(false);
+  mobileMenu.addEventListener("click", function (e) {
+    if (e.target === mobileMenu) setMenu(false);
   });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') setOpen(false);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setMenu(false);
+  });
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 700) setMenu(false);
   });
 })();
 </script>
-
 </body>
 </html>
