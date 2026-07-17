@@ -5,141 +5,355 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Downloading Knotch…</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="images/icon.png">
+<meta name="description" content="Fetching the latest Knotch release from GitHub.">
 <style>
-  /* smooth cross-fade between pages (View Transitions, progressive enhancement) */
-  @view-transition { navigation: auto; }
+/* Knotch design system — shared tokens (matches index.html) */
 
-  @media (prefers-reduced-motion: reduce) {
-    @view-transition { navigation: none; }
-  }
+/* smooth cross-fade between pages (View Transitions, progressive enhancement) */
+@view-transition { navigation: auto; }
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0a0a0b;
-    --text: #f2f0ec;
-    --muted: rgba(242,240,236,0.45);
-    --accent: #7eb8f7;
-    --border: rgba(255,255,255,0.08);
-  }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    text-align: center;
-    padding: 24px;
-  }
-  .logo {
-    font-family: 'Instrument Serif', serif;
-    font-size: 22px;
-    letter-spacing: -0.3px;
-    color: var(--text);
-    position: fixed;
-    top: 24px; left: 48px;
-    text-decoration: none;
-  }
-  .logo span { color: var(--accent); }
+:root {
+  --ink: #f5f5f7;
+  --mute: #86868b;
+  --faint: #515154;
+  --canvas: #000000;
+  --card: #111113;
+  --card-edge: rgba(255, 255, 255, 0.065);
+  --blue: #4c86ff;
+  --blue-deep: #2e6be8;
+  --glass: rgba(18, 18, 20, 0.72);
+  --grad: linear-gradient(96deg, #6fa0ff 0%, #3380ff 55%, #1e5ad6 100%);
+  --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
+  --ease-spring: cubic-bezier(0.32, 1.35, 0.42, 1);
+}
 
-  .icon {
-    width: 64px; height: 64px;
-    border-radius: 16px;
-    background: linear-gradient(180deg, #2a2a2c 0%, #0a0a0b 100%);
-    border: 1px solid rgba(255,255,255,0.1);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Instrument Serif', serif;
-    font-style: italic;
-    font-size: 42px;
-    color: #fff;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 32px rgba(0,0,0,0.5);
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  h1 {
-    font-family: 'Instrument Serif', serif;
-    font-size: 32px;
-    letter-spacing: -0.8px;
-  }
-  h1 em { font-style: italic; color: var(--accent); }
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
 
-  p {
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.6;
-    max-width: 340px;
-  }
+::selection { background: rgba(51, 128, 255, 0.35); }
 
-  .spinner {
-    width: 20px; height: 20px;
-    border: 2px solid rgba(126,184,247,0.2);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 8px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* Nav */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 130;
+  height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--glass);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nav-inner {
+  width: min(1024px, 92vw);
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.nav-mark {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 17px; font-weight: 600; letter-spacing: -0.01em;
+  color: var(--ink); text-decoration: none;
+  transition: opacity 0.25s var(--ease-apple);
+}
+.nav-mark:hover { opacity: 0.75; }
+.nav-app-icon {
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.nav-links { display: flex; align-items: center; gap: 30px; }
+.nav-links a {
+  font-size: 13px; color: rgba(245, 245, 247, 0.8);
+  text-decoration: none; letter-spacing: -0.01em;
+  transition: color 0.25s var(--ease-apple);
+}
+.nav-links a:hover { color: var(--ink); }
+@media (max-width: 700px) { .nav-links a { display: none; } }
 
-  .status {
-    font-size: 13px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 24px;
-  }
+/* Mobile menu (Apple-style) */
+.nav-burger {
+  display: none;
+  border: none; background: transparent; cursor: pointer;
+  width: 40px; height: 40px;
+  margin-right: -8px;
+  position: relative; z-index: 120; flex-shrink: 0;
+}
+.nav-burger span {
+  position: absolute; left: 11px; right: 11px;
+  height: 1.5px; border-radius: 2px;
+  background: var(--ink);
+  transition: transform 0.45s var(--ease-apple), top 0.45s var(--ease-apple);
+}
+.nav-burger span:nth-child(1) { top: 16.5px; }
+.nav-burger span:nth-child(2) { top: 23.5px; }
+body.menu-open .nav-burger span:nth-child(1) { top: 20px; transform: rotate(45deg); }
+body.menu-open .nav-burger span:nth-child(2) { top: 20px; transform: rotate(-45deg); }
 
-  .manual-link {
-    font-size: 13px;
-    color: var(--muted);
-    display: none;
-  }
-  .manual-link a {
-    color: var(--accent);
-    text-decoration: none;
-  }
-  .manual-link a:hover { text-decoration: underline; }
+.mobile-menu {
+  position: fixed; inset: 0; z-index: 110;
+  background: rgba(8, 8, 10, 0.82);
+  -webkit-backdrop-filter: saturate(180%) blur(26px);
+  backdrop-filter: saturate(180%) blur(26px);
+  padding: 108px 9vw 40px;
+  display: flex; flex-direction: column;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.45s var(--ease-apple), visibility 0s linear 0.45s;
+}
+body.menu-open .mobile-menu {
+  opacity: 1; visibility: visible;
+  transition: opacity 0.45s var(--ease-apple), visibility 0s;
+}
+.mobile-menu a {
+  font-size: 27px; font-weight: 600; letter-spacing: -0.02em;
+  color: var(--ink); text-decoration: none;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.5s var(--ease-apple), transform 0.5s var(--ease-apple);
+}
+.mobile-menu a:active { color: var(--blue); }
+body.menu-open .mobile-menu a { opacity: 1; transform: translateY(0); }
+body.menu-open .mobile-menu a:nth-child(1) { transition-delay: 0.06s; }
+body.menu-open .mobile-menu a:nth-child(2) { transition-delay: 0.11s; }
+body.menu-open .mobile-menu a:nth-child(3) { transition-delay: 0.16s; }
+body.menu-open .mobile-menu a:nth-child(4) { transition-delay: 0.21s; }
+body.menu-open { overflow: hidden; }
+@media (max-width: 700px) { .nav-burger { display: block; } }
+@media (min-width: 701px) { .mobile-menu { display: none; } }
 
-  .back {
-    position: fixed;
-    bottom: 28px;
-    font-size: 13px;
-    color: var(--muted);
-    text-decoration: none;
-    border: 1px solid var(--border);
-    padding: 6px 16px;
-    border-radius: 100px;
-    transition: color 0.2s, border-color 0.2s;
+/* Centered stage */
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  text-align: center;
+  padding: 110px 6vw 90px;
+  position: relative;
+}
+.stage-glow {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 120vw; height: 70vh;
+  background:
+    radial-gradient(ellipse 42% 48% at 45% 32%, rgba(51, 128, 255, 0.14), transparent 68%),
+    radial-gradient(ellipse 40% 44% at 58% 28%, rgba(30, 90, 214, 0.12), transparent 66%);
+  pointer-events: none;
+  filter: blur(6px);
+}
+.stage > * { position: relative; }
+
+/* App icon */
+.app-icon {
+  width: 84px; height: 84px;
+  border-radius: 20px;
+  box-shadow: 0 18px 46px rgba(51, 128, 255, 0.35);
+  animation: rise 1s var(--ease-apple) 0.1s both, breathe 3.2s ease-in-out 1.2s infinite alternate;
+}
+@keyframes breathe {
+  from { box-shadow: 0 18px 46px rgba(51, 128, 255, 0.3); }
+  to   { box-shadow: 0 22px 60px rgba(51, 128, 255, 0.5); }
+}
+
+h1 {
+  font-size: clamp(36px, 6vw, 60px);
+  line-height: 1.06;
+  font-weight: 700;
+  letter-spacing: -0.024em;
+  animation: rise 1s var(--ease-apple) 0.22s both;
+}
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lede {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--mute);
+  max-width: 40ch;
+  animation: rise 1s var(--ease-apple) 0.34s both;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Status */
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 28px;
+  font-size: 13.5px;
+  color: var(--mute);
+  animation: rise 1s var(--ease-apple) 0.46s both;
+}
+.spinner {
+  width: 18px; height: 18px;
+  border: 2px solid rgba(76, 134, 255, 0.22);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.manual-link {
+  font-size: 13.5px;
+  color: var(--mute);
+  display: none;
+  animation: rise 0.7s var(--ease-apple) both;
+}
+.manual-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--blue);
+  text-decoration: none;
+}
+.manual-link a:hover { text-decoration: underline; }
+.manual-link .chev { font-weight: 600; }
+
+/* First-launch tip */
+.dl-note {
+  margin-top: 14px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: 18px;
+  padding: 20px 24px;
+  max-width: 540px;
+  animation: rise 1s var(--ease-apple) 0.58s both;
+}
+.dl-note-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13.5px; font-weight: 600;
+}
+.dl-note p { font-size: 13px; color: var(--mute); line-height: 1.55; }
+.dl-note code {
+  font-family: "SF Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: #9fd0ff;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Back pill */
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 980px;
+  padding: 10px 20px;
+  margin-top: 8px;
+  transition: transform 0.35s var(--ease-spring), background 0.3s var(--ease-apple);
+  animation: rise 1s var(--ease-apple) 0.68s both;
+}
+.back:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-1px); }
+.back:active { transform: scale(0.96); }
+.back svg { display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-  .back:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+  .spinner { animation: spin 0.8s linear infinite !important; }
+}
 </style>
 </head>
 <body>
 
-<a href="index.html" class="logo">K<span>notch</span></a>
+<nav>
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html" aria-label="Knotch home">
+      <img class="nav-app-icon" src="images/icon.png" alt="" aria-hidden="true">
+      Knotch
+    </a>
+    <div class="nav-links">
+      <a href="index.html#music">Music</a>
+      <a href="index.html#features">Features</a>
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span>
+    </button>
+  </div>
+</nav>
 
-<img src="images/icon.png" alt="Knotch" width="64" height="64" style="border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.5);">
-
-<h1>Your download is<br><em>starting…</em></h1>
-
-<p>Fetching the latest release from GitHub. If it doesn't start in a few seconds, use the link below.</p>
-
-<div class="status" id="status">
-  <span class="spinner"></span> Finding latest release…
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Overview</a>
+  <a href="index.html#features">Features</a>
+  <a href="faq.html">FAQ</a>
+  <a href="privacy.html">Privacy</a>
 </div>
 
-<div class="manual-link" id="manual">
-  <a href="#" id="manual-href">Click here to download manually →</a>
-</div>
+<main class="stage">
+  <div class="stage-glow" aria-hidden="true"></div>
 
-<a href="index.html" class="back">← Back to Knotch</a>
+  <img class="app-icon" src="images/icon.png" alt="Knotch app icon" width="84" height="84">
+
+  <h1>Your download is<br><span class="grad-text">starting…</span></h1>
+
+  <p class="lede">Fetching the latest release from GitHub. If it doesn't start in a few seconds, use the link below.</p>
+
+  <div class="status" id="status">
+    <span class="spinner"></span> Finding latest release…
+  </div>
+
+  <div class="manual-link" id="manual">
+    <a href="#" id="manual-href">Click here to download manually <span class="chev">›</span></a>
+  </div>
+
+  <div class="dl-note">
+    <span class="dl-note-title">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6.5" stroke="#6fa0ff" stroke-width="1.4"/><path d="M7.5 4v4M7.5 10.6v.1" stroke="#6fa0ff" stroke-width="1.6" stroke-linecap="round"/></svg>
+      First launch on macOS
+    </span>
+    <p>Knotch isn't notarized yet, so macOS will block it the first time. Run this once in Terminal, then open it normally:</p>
+    <code>xattr -dr com.apple.quarantine /Applications/Knotch.app</code>
+    <p>Or open the app, dismiss the warning, and choose Open Anyway in System Settings › Privacy &amp; Security.</p>
+  </div>
+
+  <a href="index.html" class="back">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 2 3.5 6l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to Knotch
+  </a>
+</main>
 
 <script>
 (async () => {
@@ -153,10 +367,10 @@
     manual.style.display = 'block';
     if (url) {
       manualHref.href = url;
-      manualHref.textContent = 'Click here to download manually →';
+      manualHref.innerHTML = 'Click here to download manually <span class="chev">›</span>';
     } else {
       manualHref.href = 'https://github.com/seshyweshyy/Knotch/releases/latest';
-      manualHref.textContent = 'Open GitHub releases page →';
+      manualHref.innerHTML = 'Open GitHub releases page <span class="chev">›</span>';
     }
   };
 
@@ -182,7 +396,7 @@
     // Show manual link immediately as fallback
     manual.style.display = 'block';
     manualHref.href = url;
-    manualHref.textContent = `Download ${zip.name} manually →`;
+    manualHref.innerHTML = `Download ${zip.name} manually <span class="chev">›</span>`;
 
     // Trigger download
     window.location.href = url;
@@ -191,7 +405,31 @@
     fail(null);
   }
 })();
-</script>
 
+/* Mobile menu */
+(function () {
+  var burger = document.getElementById("navBurger");
+  var mobileMenu = document.getElementById("mobileMenu");
+  function setMenu(open) {
+    document.body.classList.toggle("menu-open", open);
+    burger.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  burger.addEventListener("click", function () {
+    setMenu(!document.body.classList.contains("menu-open"));
+  });
+  mobileMenu.querySelectorAll("a").forEach(function (a) {
+    a.addEventListener("click", function () { setMenu(false); });
+  });
+  mobileMenu.addEventListener("click", function (e) {
+    if (e.target === mobileMenu) setMenu(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setMenu(false);
+  });
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 700) setMenu(false);
+  });
+})();
+</script>
 </body>
 </html>
