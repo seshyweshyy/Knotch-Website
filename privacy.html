@@ -26,7 +26,7 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   background: var(--canvas);
@@ -116,7 +116,7 @@ nav {
 }
 .hero-glow {
   position: absolute; top: -30%; left: 50%; transform: translateX(-50%);
-  width: 120vw; height: 60vh;
+  width: 100vw; height: 60vh;
   background:
     radial-gradient(ellipse 44% 50% at 45% 35%, rgba(51, 128, 255, 0.13), transparent 68%),
     radial-gradient(ellipse 40% 46% at 58% 30%, rgba(30, 90, 214, 0.12), transparent 66%);
@@ -223,6 +223,10 @@ nav {
   border-radius: 7px;
   padding: 2px 7px;
   white-space: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
+  display: inline-block;
+  vertical-align: bottom;
 }
 
 /* Contact card */
