@@ -3,663 +3,704 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Knotch FAQ — everything you need to know.">
 <title>FAQ — Knotch</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="images/icon.png">
+<meta name="description" content="Everything you might want to know about Knotch before downloading.">
 <style>
-  /* smooth cross-fade between pages (View Transitions, progressive enhancement) */
-  @view-transition { navigation: auto; }
+/* Knotch design system — shared tokens (matches index.html) */
+:root {
+  --ink: #f5f5f7;
+  --mute: #86868b;
+  --faint: #515154;
+  --canvas: #000000;
+  --panel: #0b0b0d;
+  --card: #111113;
+  --card-edge: rgba(255, 255, 255, 0.065);
+  --blue: #4c86ff;
+  --blue-deep: #2e6be8;
+  --glass: rgba(18, 18, 20, 0.72);
+  --grad: linear-gradient(96deg, #6fa0ff 0%, #3380ff 55%, #1e5ad6 100%);
+  --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
+  --ease-spring: cubic-bezier(0.32, 1.35, 0.42, 1);
+}
 
-  @media (prefers-reduced-motion: reduce) {
-    @view-transition { navigation: none; }
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
 
-  :root {
-    --bg: #0a0a0b;
-    --surface: #111113;
-    --surface2: #18181c;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.14);
-    --text: #f2f0ec;
-    --muted: rgba(242,240,236,0.45);
-    --accent: #7eb8f7;
-  }
+::selection { background: rgba(51, 128, 255, 0.35); }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+.headline {
+  font-size: clamp(38px, 6.4vw, 72px);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+.subhead {
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.45;
+  color: var(--mute);
+}
+.eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 48px;
-    background: rgba(10,10,11,0.7);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-  .logo {
-    font-family: 'Instrument Serif', serif;
-    font-size: 22px;
-    letter-spacing: -0.3px;
-    color: var(--text);
-    text-decoration: none;
-  }
-  .logo span { color: var(--accent); }
-  nav a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 400;
-    transition: color 0.2s;
-  }
-  nav a:hover { color: var(--text); }
-  .nav-links { display: flex; gap: 32px; align-items: center; }
-  .btn-download {
-    background: var(--accent);
-    color: #04111f;
-    padding: 9px 20px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 500;
-    font-family: 'DM Sans', sans-serif;
-    text-decoration: none;
-    transition: opacity 0.2s, transform 0.15s;
-  }
-  .btn-download:hover { opacity: 0.88; transform: scale(0.98); color: #04111f; }
+/* Nav */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 130;
+  height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--glass);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nav-inner {
+  width: min(1024px, 92vw);
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.nav-mark {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 17px; font-weight: 600; letter-spacing: -0.01em;
+  color: var(--ink); text-decoration: none;
+  transition: opacity 0.25s var(--ease-apple);
+}
+.nav-mark:hover { opacity: 0.75; }
+.nav-app-icon {
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.nav-links { display: flex; align-items: center; gap: 30px; }
+.nav-links a {
+  font-size: 13px; color: rgba(245, 245, 247, 0.8);
+  text-decoration: none; letter-spacing: -0.01em;
+  transition: color 0.25s var(--ease-apple);
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.current { color: var(--ink); }
+.nav-cta {
+  font-size: 13px; font-weight: 500; color: #fff;
+  background: var(--blue-deep);
+  border-radius: 980px; padding: 6px 15px;
+  text-decoration: none;
+  transition: background 0.25s var(--ease-apple);
+}
+.nav-cta:hover { background: #3d7dff; }
+@media (max-width: 700px) { .nav-links a:not(.nav-cta) { display: none; } }
 
-  /* PAGE */
-  .page {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 148px 24px 100px;
-  }
+/* Page hero */
+.page-hero {
+  padding: 170px 6vw 70px;
+  text-align: center;
+  position: relative;
+}
+.hero-glow {
+  position: absolute; top: -30%; left: 50%; transform: translateX(-50%);
+  width: 120vw; height: 60vh;
+  background:
+    radial-gradient(ellipse 44% 50% at 45% 35%, rgba(51, 128, 255, 0.13), transparent 68%),
+    radial-gradient(ellipse 40% 46% at 58% 30%, rgba(30, 90, 214, 0.12), transparent 66%);
+  pointer-events: none;
+  filter: blur(6px);
+}
+.page-hero .eyebrow { margin-bottom: 20px; animation: rise 1s var(--ease-apple) 0.1s both; }
+.page-hero h1 { animation: rise 1s var(--ease-apple) 0.22s both; position: relative; }
+.page-hero .subhead {
+  max-width: 46ch; margin: 20px auto 0;
+  animation: rise 1s var(--ease-apple) 0.36s both;
+  position: relative;
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-  /* HERO */
-  .tag {
-    display: inline-block;
-    border: 1px solid rgba(126,184,247,0.25);
-    border-radius: 100px;
-    padding: 5px 14px;
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--accent);
-    letter-spacing: 0.04em;
-    margin-bottom: 28px;
-    text-transform: uppercase;
-    background: rgba(126,184,247,0.06);
-  }
-  .page-hero {
-    margin-bottom: 64px;
-    animation: fadeUp 0.6s ease both 0.05s;
-  }
-  .page-hero h1 {
-    font-family: 'Instrument Serif', serif;
-    font-size: clamp(40px, 7vw, 68px);
-    line-height: 1.0;
-    letter-spacing: -2px;
-    margin-bottom: 20px;
-  }
-  .page-hero h1 em { font-style: italic; color: var(--accent); }
-  .page-hero p {
-    font-size: 16px;
-    color: var(--muted);
-    line-height: 1.65;
-    max-width: 480px;
-  }
+/* Layout */
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px 6vw 120px;
+}
 
-  /* CATEGORY LABEL */
-  .faq-category {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--accent);
-    font-weight: 500;
-    margin-bottom: 16px;
-    margin-top: 52px;
-  }
-  .faq-category:first-of-type { margin-top: 0; }
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.9s var(--ease-apple), transform 0.9s var(--ease-apple);
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
 
-  /* ACCORDION */
-  .faq-list {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    margin-bottom: 4px;
-  }
+/* FAQ */
+.faq-category {
+  margin: 56px 0 18px;
+}
+.faq-category:first-child { margin-top: 24px; }
 
-  .faq-item {
-    border-bottom: 1px solid var(--border);
-  }
-  .faq-item:last-child { border-bottom: none; }
+.faq-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-  .faq-question {
-    width: 100%;
-    background: var(--surface);
-    border: none;
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    cursor: pointer;
-    text-align: left;
-    transition: background 0.15s;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .faq-question:hover { background: var(--surface2); }
-  .faq-item.open .faq-question { background: var(--surface2); }
+.faq-item {
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: border-color 0.4s var(--ease-apple);
+}
+.faq-item:hover { border-color: rgba(255, 255, 255, 0.13); }
+.faq-item.open { border-color: rgba(76, 134, 255, 0.35); }
 
-  .faq-q-text {
-    font-size: 15px;
-    font-weight: 400;
-    color: var(--text);
-    line-height: 1.45;
-  }
+.faq-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  text-align: left;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--ink);
+  font-size: 16.5px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  padding: 20px 24px;
+}
+.faq-q:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 3px rgba(51, 128, 255, 0.6);
+  border-radius: 20px;
+}
 
-  .faq-chevron {
-    flex-shrink: 0;
-    width: 20px; height: 20px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--muted);
-    transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1), color 0.15s;
-  }
-  .faq-item.open .faq-chevron {
-    transform: rotate(180deg);
-    color: var(--accent);
-  }
+.faq-chev {
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.5s var(--ease-spring), background 0.3s var(--ease-apple);
+}
+.faq-item.open .faq-chev {
+  transform: rotate(180deg);
+  background: rgba(76, 134, 255, 0.22);
+}
+.faq-chev svg { display: block; }
 
-  .faq-answer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s cubic-bezier(0.22,1,0.36,1);
-    background: var(--surface2);
-  }
-  .faq-item.open .faq-answer { max-height: 600px; }
+.faq-a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.55s var(--ease-apple);
+}
+.faq-item.open .faq-a { grid-template-rows: 1fr; }
+.faq-a-clip { overflow: hidden; min-height: 0; }
+.faq-a-inner {
+  padding: 0 24px 22px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--mute);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.4s var(--ease-apple), transform 0.4s var(--ease-apple);
+}
+.faq-item.open .faq-a-inner {
+  opacity: 1; transform: translateY(0);
+  transition-delay: 0.12s;
+}
+.faq-a-inner strong { color: var(--ink); font-weight: 600; }
+.faq-a-inner a { color: var(--blue); text-decoration: none; }
+.faq-a-inner a:hover { text-decoration: underline; }
 
-  .faq-answer-inner {
-    padding: 0 24px 22px;
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.75;
-  }
-  .faq-answer-inner p { margin-bottom: 10px; }
-  .faq-answer-inner p:last-child { margin-bottom: 0; }
-  .faq-answer-inner a {
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(126,184,247,0.25);
-    transition: border-color 0.2s;
-  }
-  .faq-answer-inner a:hover { border-color: var(--accent); }
-  .inline-note {
-    display: inline-block;
-    background: rgba(126,184,247,0.07);
-    border: 1px solid rgba(126,184,247,0.18);
-    border-radius: 6px;
-    padding: 0 6px;
-    font-size: 13px;
-    color: var(--accent);
-  }
+.inline-note {
+  font-family: "SF Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.86em;
+  color: #9fd0ff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
 
-  /* CONTACT CARD */
-  .contact-card {
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 16px;
-    padding: 28px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    flex-wrap: wrap;
-    margin-top: 60px;
-  }
-  .contact-card-text h3 {
-    font-family: 'Instrument Serif', serif;
-    font-size: 20px;
-    letter-spacing: -0.3px;
-    margin-bottom: 4px;
-  }
-  .contact-card-text p { font-size: 13px; color: var(--muted); }
-  .btn-contact {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border2);
-    padding: 10px 22px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 400;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-  .btn-contact:hover {
-    border-color: rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.05);
-    color: var(--text);
-  }
+/* Contact card */
+.contact-card {
+  margin-top: 72px;
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+  border-radius: 28px;
+  padding: 34px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+.contact-card::before {
+  content: "";
+  position: absolute; inset: auto -20% -70% -20%;
+  height: 120%;
+  background: radial-gradient(50% 60% at 50% 100%, rgba(51, 128, 255, 0.14), transparent 70%);
+  pointer-events: none;
+}
+.contact-card h3 {
+  font-size: 22px; font-weight: 700; letter-spacing: -0.015em;
+  margin-bottom: 6px;
+}
+.contact-card p { font-size: 14.5px; color: var(--mute); max-width: 40ch; }
+.contact-actions { display: flex; gap: 12px; flex-wrap: wrap; position: relative; }
 
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 36px 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: var(--muted);
-    font-size: 13px;
-  }
-  footer a { color: var(--muted); text-decoration: none; }
-  footer a:hover { color: var(--text); }
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  border: none; cursor: pointer;
+  font-family: inherit; font-size: 15px; font-weight: 500;
+  letter-spacing: -0.01em;
+  border-radius: 980px; padding: 12px 22px;
+  text-decoration: none;
+  transition: transform 0.35s var(--ease-spring), background 0.3s var(--ease-apple);
+}
+.btn:active { transform: scale(0.96); }
+.btn-fill {
+  color: #fff; background: var(--blue-deep);
+  box-shadow: 0 8px 26px rgba(46, 107, 232, 0.35);
+}
+.btn-fill:hover { background: #3d7dff; transform: translateY(-1px); }
+.btn-glass {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.btn-glass:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-1px); }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .faq-section { animation: fadeUp 0.5s ease both 0.15s; }
+/* Footer */
+footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 34px 6vw 50px;
+  font-size: 12px;
+  color: var(--mute);
+}
+.foot-inner {
+  max-width: 1024px; margin: 0 auto;
+  display: flex; flex-wrap: wrap; justify-content: space-between;
+  gap: 18px; line-height: 1.8;
+}
+.foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
+.foot-links a {
+  color: var(--mute); text-decoration: none;
+  transition: color 0.25s var(--ease-apple);
+}
+.foot-links a:hover { color: var(--ink); }
+.foot-fine { max-width: 62ch; color: var(--faint); }
 
 
-  /* HAMBURGER + MOBILE MENU */
-  .nav-burger {
-    display: none;
-    width: 38px; height: 38px;
-    align-items: center; justify-content: center;
-    flex-direction: column;
-    gap: 5px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--border2);
-    border-radius: 50%;
-    cursor: pointer;
-    padding: 0;
-    flex-shrink: 0;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .nav-burger span {
-    display: block;
-    width: 15px; height: 1.6px;
-    background: var(--text);
-    border-radius: 2px;
-    transition: transform .35s cubic-bezier(.33,1.27,.35,1), opacity .2s;
-  }
-  .nav-burger.open span:nth-child(1) { transform: translateY(3.3px) rotate(45deg); }
-  .nav-burger.open span:nth-child(2) { transform: translateY(-3.3px) rotate(-45deg); }
+/* ---------- Mobile menu (Apple-style) ---------- */
 
-  .mobile-menu {
-    position: fixed;
-    top: 68px; left: 12px; right: 12px;
-    z-index: 99;
-    display: flex;
-    flex-direction: column;
-    background: rgba(16,16,19,0.92);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--border2);
-    border-radius: 18px;
-    padding: 8px;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
-    opacity: 0;
-    transform: translateY(-10px) scale(0.97);
-    transform-origin: top center;
-    visibility: hidden;
-    pointer-events: none;
-    transition:
-      opacity .25s ease,
-      transform .45s cubic-bezier(.33,1.27,.35,1),
-      visibility 0s linear .25s;
-  }
-  .mobile-menu.open {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    visibility: visible;
-    pointer-events: auto;
-    transition:
-      opacity .25s ease,
-      transform .45s cubic-bezier(.33,1.27,.35,1),
-      visibility 0s;
-  }
-  .mobile-menu a {
-    color: var(--text);
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 400;
-    padding: 13px 16px;
-    border-radius: 12px;
-    transition: background .15s;
-  }
-  .mobile-menu a:active, .mobile-menu a:hover { background: rgba(255,255,255,0.06); }
-  .mobile-menu a + a { border-top: 1px solid var(--border); }
+.nav-burger {
+  display: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 40px; height: 40px;
+  margin-right: -8px;
+  position: relative;
+  z-index: 120;
+  flex-shrink: 0;
+}
+.nav-burger span {
+  position: absolute; left: 11px; right: 11px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: var(--ink);
+  transition: transform 0.45s var(--ease-apple), top 0.45s var(--ease-apple);
+}
+.nav-burger span:nth-child(1) { top: 16.5px; }
+.nav-burger span:nth-child(2) { top: 23.5px; }
+body.menu-open .nav-burger span:nth-child(1) { top: 20px; transform: rotate(45deg); }
+body.menu-open .nav-burger span:nth-child(2) { top: 20px; transform: rotate(-45deg); }
 
-  @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    .nav-links a:not(.btn-download) { display: none; }
-    .nav-burger { display: flex; }
-    footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
-    .contact-card { flex-direction: column; align-items: flex-start; }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(8, 8, 10, 0.82);
+  -webkit-backdrop-filter: saturate(180%) blur(26px);
+  backdrop-filter: saturate(180%) blur(26px);
+  padding: 108px 9vw 40px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s var(--ease-apple), visibility 0s linear 0.45s;
+}
+body.menu-open .mobile-menu {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.45s var(--ease-apple), visibility 0s;
+}
+.mobile-menu a {
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s var(--ease-apple), transform 0.5s var(--ease-apple);
+}
+.mobile-menu a:active { color: var(--blue); }
+body.menu-open .mobile-menu a { opacity: 1; transform: translateY(0); }
+body.menu-open .mobile-menu a:nth-child(1) { transition-delay: 0.06s; }
+body.menu-open .mobile-menu a:nth-child(2) { transition-delay: 0.11s; }
+body.menu-open .mobile-menu a:nth-child(3) { transition-delay: 0.16s; }
+body.menu-open .mobile-menu a:nth-child(4) { transition-delay: 0.21s; }
+body.menu-open .mobile-menu a:nth-child(5) { transition-delay: 0.26s; }
+body.menu-open .mobile-menu a:nth-child(6) { transition-delay: 0.31s; }
+body.menu-open { overflow: hidden; }
+
+@media (max-width: 700px) { .nav-burger { display: block; } }
+@media (min-width: 701px) { .mobile-menu { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; }
+}
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="logo">K<span>notch</span></a>
-  <div class="nav-links">
-    <a href="index.html#features">Features</a>
-    <a href="index.html#pricing">Pricing</a>
-    <a href="faq.html" style="color: var(--text);">FAQ</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="download.html" class="btn-download">Download free →</a>
+  <div class="nav-inner">
+    <a class="nav-mark" href="index.html" aria-label="Knotch home">
+      <img class="nav-app-icon" src="images/icon.png" alt="" aria-hidden="true">
+      Knotch
+    </a>
+    <div class="nav-links">
+      <a href="index.html#music">Music</a>
+      <a href="index.html#features">Features</a>
+      <a href="faq.html" class="current">FAQ</a>
+      <a href="privacy.html">Privacy</a>
+      <a class="nav-cta" href="index.html#download">Download</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span>
+    </button>
   </div>
-  <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-    <span></span><span></span>
-  </button>
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a href="index.html#features">Features</a>
-  <a href="index.html#pricing">Pricing</a>
+  <a href="index.html">Overview</a>
   <a href="faq.html">FAQ</a>
   <a href="privacy.html">Privacy</a>
+  <a href="index.html#download">Download</a>
 </div>
+
+<header class="page-hero">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <p class="eyebrow">FAQ</p>
+  <h1 class="headline">Good questions,<br><span class="grad-text">honest answers.</span></h1>
+  <p class="subhead">Everything you might want to know about Knotch before downloading.</p>
+</header>
 
 <main class="page">
 
-  <div class="page-hero">
-    <div class="tag">FAQ</div>
-    <h1>Good questions,<br><em>honest answers.</em></h1>
-    <p>Everything you might want to know about Knotch before downloading.</p>
+  <p class="eyebrow faq-category reveal">Getting started</p>
+  <div class="faq-group">
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        What Mac models does Knotch support?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Knotch is designed for MacBook Pro and MacBook Air models with a physical notch — that means any MacBook Pro from late 2021 onwards, and the M2 MacBook Air and later.</p>
+        <p>It will also run on older Macs and external displays without a notch, but the notch-area UI won't appear. The music controls, shelf, and other widgets still work normally.</p>
+      </div></div></div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        What version of macOS do I need?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Knotch requires macOS 15 Sequoia or later.</p>
+      </div></div></div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        Why does macOS say the app can't be opened?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Knotch isn't notarized with Apple (that requires a paid Developer account). macOS Gatekeeper will block it on first launch.</p>
+        <p>To open it: right-click <span class="inline-note">Knotch.app</span> → <strong>Open</strong> → click <strong>Open</strong> in the dialog. You only need to do this once — after that it launches normally.</p>
+        <p>Alternatively, go to <strong>System Settings → Privacy &amp; Security</strong> and click <strong>Open Anyway</strong> after the first blocked launch attempt.</p>
+      </div></div></div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        How do I make Knotch launch at login?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Open Knotch settings and toggle <strong>Launch at Login</strong>. You can also add it manually via <strong>System Settings → General → Login Items</strong>.</p>
+      </div></div></div>
+    </div>
   </div>
 
-  <div class="faq-section">
-
-    <p class="faq-category">Getting started</p>
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">What Mac models does Knotch support?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Knotch is designed for MacBook Pro and MacBook Air models with a physical notch — that means any MacBook Pro from late 2021 onwards, and the M2 MacBook Air and later.</p>
-            <p>It will also run on older Macs and external displays without a notch, but the notch-area UI won't appear. The music controls, shelf, and other widgets still work normally.</p>
-          </div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">What version of macOS do I need?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Knotch requires macOS 15 Sequoia or later.</p>
-          </div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">Why does macOS say the app can't be opened?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Knotch isn't notarized with Apple (that requires a paid Developer account). macOS Gatekeeper will block it on first launch.</p>
-            <p>To open it: right-click <span class="inline-note">Knotch.app</span> → <strong>Open</strong> → click <strong>Open</strong> in the dialog. You only need to do this once — after that it launches normally.</p>
-            <p>Alternatively, go to <strong>System Settings → Privacy &amp; Security</strong> and click <strong>Open Anyway</strong> after the first blocked launch attempt.</p>
-          </div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">How do I make Knotch launch at login?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Open Knotch settings and toggle <strong>Launch at Login</strong>. You can also add it manually via <strong>System Settings → General → Login Items</strong>.</p>
-          </div>
-        </div>
-      </div>
+  <p class="eyebrow faq-category reveal">Features</p>
+  <div class="faq-group">
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        Which music apps does Knotch support?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Spotify and Apple Music are fully supported with album art, track info, playback controls, and a progress bar. YouTube Music support is also included.</p>
+        <p>Any other app that exposes a <span class="inline-note">Now Playing</span> media session to macOS will show basic track info in the notch, though controls may be limited.</p>
+      </div></div></div>
     </div>
 
-    <p class="faq-category">Features</p>
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">Which music apps does Knotch support?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Spotify and Apple Music are fully supported with album art, track info, playback controls, and a progress bar. YouTube Music support is also included.</p>
-            <p>Any other app that exposes a <span class="inline-note">Now Playing</span> media session to macOS will show basic track info in the notch, though controls may be limited.</p>
-          </div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">Does the lock screen gradient actually work?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Yes. When your screen locks, Knotch generates a gradient from the current track's album art and sets it as your desktop wallpaper — which macOS shows behind the lock screen UI. Your original wallpaper is restored the moment you unlock.</p>
-            <p>This is the only viable way to render content behind the macOS lock screen without system-level access. It's seamless in practice.</p>
-          </div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">What is the Shelf?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>The Shelf lets you drag files into the notch panel and pick them up later in any app. Think of it as a persistent clipboard for files — useful when moving things between Finder windows or dragging attachments into apps.</p>
-          </div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">Can I customise what appears in the notch?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Yes — open Knotch settings to toggle individual widgets on or off, choose which panels appear in the expanded view, and adjust behaviour like the lock screen gradient and hover sensitivity.</p>
-          </div>
-        </div>
-      </div>
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        Does the lock screen gradient actually work?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Yes. When your screen locks, Knotch generates a gradient from the current track's album art and sets it as your desktop wallpaper — which macOS shows behind the lock screen UI. Your original wallpaper is restored the moment you unlock.</p>
+        <p>This is the only viable way to render content behind the macOS lock screen without system-level access. It's seamless in practice.</p>
+      </div></div></div>
     </div>
 
-    <p class="faq-category">Performance &amp; battery</p>
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">Will Knotch drain my battery?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Knotch is built in pure Swift with energy usage as a first-class concern. Animations are throttled, album art blurs are cached as static snapshots and only regenerated on track changes, and the app idles at near-zero CPU when the notch is closed.</p>
-            <p>It won't show up meaningfully in your battery usage stats.</p>
-          </div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">How much RAM does Knotch use?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Typically under 80 MB. There's no Electron runtime, no web view, and no background network activity — just a native SwiftUI app doing exactly what you see.</p>
-          </div>
-        </div>
-      </div>
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        What is the Shelf?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>The Shelf lets you drag files into the notch panel and pick them up later in any app. Think of it as a persistent clipboard for files — useful when moving things between Finder windows or dragging attachments into apps.</p>
+      </div></div></div>
     </div>
 
-    <p class="faq-category">Privacy &amp; security</p>
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">Does Knotch send any data anywhere?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>No. Knotch has no servers, no analytics, no crash reporting, and no telemetry of any kind. Everything runs locally on your Mac. See the <a href="privacy.html">Privacy Policy</a> for the full breakdown.</p>
-          </div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">What permissions does Knotch need?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Knotch may request access to <strong>Calendars</strong> (to show today's events) and <strong>Automation</strong> (to control Spotify via AppleScript). Both are optional — you can decline and the rest of the app works fine.</p>
-            <p>No microphone, camera, contacts, location, or any other sensitive permission is ever requested.</p>
-          </div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">Is Knotch open source?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Yes. The full source code is on <a href="https://github.com/seshyweshyy/Knotch" target="_blank" rel="noopener">GitHub</a>. Every privacy and security claim is verifiable by reading the code.</p>
-          </div>
-        </div>
-      </div>
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        Can I customise what appears in the notch?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Yes — open Knotch settings to toggle individual widgets on or off, choose which panels appear in the expanded view, and adjust behaviour like the lock screen gradient and hover sensitivity.</p>
+      </div></div></div>
+    </div>
+  </div>
+
+  <p class="eyebrow faq-category reveal">Performance &amp; battery</p>
+  <div class="faq-group">
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        Will Knotch drain my battery?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Knotch is built in pure Swift with energy usage as a first-class concern. Animations are throttled, album art blurs are cached as static snapshots and only regenerated on track changes, and the app idles at near-zero CPU when the notch is closed.</p>
+        <p>It won't show up meaningfully in your battery usage stats.</p>
+      </div></div></div>
     </div>
 
-    <p class="faq-category">Troubleshooting</p>
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">The notch panel isn't appearing when I hover.</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Make sure Knotch is running (check the menu bar or Activity Monitor). If it is, try quitting and relaunching. On first run, macOS occasionally needs a moment to grant window-level access to the notch area.</p>
-            <p>If the issue persists, open Knotch settings and toggle the notch widget off and back on.</p>
-          </div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">Album art isn't showing up for Spotify.</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Knotch reads album art via AppleScript automation from the Spotify desktop app. Make sure you've granted Automation permission in <strong>System Settings → Privacy &amp; Security → Automation</strong> and that Knotch has access to Spotify.</p>
-            <p>Spotify must be the desktop app — the web player isn't supported.</p>
-          </div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggle(this)">
-          <span class="faq-q-text">How do I uninstall Knotch?</span>
-          <span class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <p>Quit Knotch, then drag <span class="inline-note">Knotch.app</span> to the Trash. To remove preferences too, run this in Terminal:</p>
-            <p><span class="inline-note">defaults delete com.seshyweshyy.Knotch</span></p>
-            <p>That's everything — no other files are written outside the app bundle and UserDefaults.</p>
-          </div>
-        </div>
-      </div>
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        How much RAM does Knotch use?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Typically under 80 MB. There's no Electron runtime, no web view, and no background network activity — just a native SwiftUI app doing exactly what you see.</p>
+      </div></div></div>
+    </div>
+  </div>
+
+  <p class="eyebrow faq-category reveal">Privacy &amp; security</p>
+  <div class="faq-group">
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        Does Knotch send any data anywhere?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>No. Knotch has no servers, no analytics, no crash reporting, and no telemetry of any kind. Everything runs locally on your Mac. See the <a href="privacy.html">Privacy Policy</a> for the full breakdown.</p>
+      </div></div></div>
     </div>
 
-  </div><!-- /faq-section -->
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        What permissions does Knotch need?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Knotch may request access to <strong>Calendars</strong> (to show today's events) and <strong>Automation</strong> (to control Spotify via AppleScript). Both are optional — you can decline and the rest of the app works fine.</p>
+        <p>No microphone, camera, contacts, location, or any other sensitive permission is ever requested.</p>
+      </div></div></div>
+    </div>
 
-  <div class="contact-card">
-    <div class="contact-card-text">
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        Is Knotch open source?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Yes. The full source code is on <a href="https://github.com/seshyweshyy/Knotch" target="_blank" rel="noopener">GitHub</a>. Every privacy and security claim is verifiable by reading the code.</p>
+      </div></div></div>
+    </div>
+  </div>
+
+  <p class="eyebrow faq-category reveal">Troubleshooting</p>
+  <div class="faq-group">
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        The notch panel isn't appearing when I hover.
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Make sure Knotch is running (check the menu bar or Activity Monitor). If it is, try quitting and relaunching. On first run, macOS occasionally needs a moment to grant window-level access to the notch area.</p>
+        <p>If the issue persists, open Knotch settings and toggle the notch widget off and back on.</p>
+      </div></div></div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        Album art isn't showing up for Spotify.
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Knotch reads album art via AppleScript automation from the Spotify desktop app. Make sure you've granted Automation permission in <strong>System Settings → Privacy &amp; Security → Automation</strong> and that Knotch has access to Spotify.</p>
+        <p>Spotify must be the desktop app — the web player isn't supported.</p>
+      </div></div></div>
+    </div>
+
+    <div class="faq-item reveal">
+      <button class="faq-q" aria-expanded="false">
+        How do I uninstall Knotch?
+        <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
+        <p>Quit Knotch, then drag <span class="inline-note">Knotch.app</span> to the Trash. To remove preferences too, run this in Terminal:</p>
+        <p><span class="inline-note">defaults delete com.seshyweshyy.Knotch</span></p>
+        <p>That's everything — no other files are written outside the app bundle and UserDefaults.</p>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="contact-card reveal">
+    <div>
       <h3>Still stuck?</h3>
       <p>Open a GitHub issue or send an email — we read everything.</p>
     </div>
-    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-      <a href="https://github.com/seshyweshyy/Knotch/issues" target="_blank" rel="noopener" class="btn-contact">Open an issue →</a>
-      <a href="mailto:seshyweshyy@gmail.com" class="btn-contact">Email us →</a>
+    <div class="contact-actions">
+      <a class="btn btn-glass" href="https://github.com/seshyweshyy/Knotch/issues">Open an issue</a>
+      <a class="btn btn-fill" href="mailto:seshyweshyy@gmail.com">Email us</a>
     </div>
   </div>
 
 </main>
 
 <footer>
-  <a href="index.html" class="logo" style="font-size: 17px; font-family: 'Instrument Serif', serif;">K<span style="color: var(--accent);">notch</span></a>
-  <div style="display: flex; gap: 24px;">
-    <a href="privacy.html">Privacy</a>
-    <a href="https://github.com/seshyweshyy/Knotch">GitHub</a>
-    <a href="mailto:seshyweshyy@gmail.com">Contact</a>
+  <div class="foot-inner">
+    <p class="foot-fine">
+      Knotch is an independent, open-source adaptation of boring.notch, licensed under GPLv3.
+      Not affiliated with Apple Inc.
+    </p>
+    <div>
+      <div class="foot-links">
+        <a href="index.html">Overview</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="https://github.com/seshyweshyy/Knotch">GitHub</a>
+        <a href="https://github.com/seshyweshyy/Knotch/releases">Releases</a>
+        <a href="https://seshyweshyy.com">seshyweshyy.com</a>
+      </div>
+      <p style="margin-top:10px; color:var(--faint);">© 2026 seshyweshyy. Made in Sydney.</p>
+    </div>
   </div>
-  <div>© 2026 Knotch</div>
 </footer>
 
 <script>
-  function toggle(btn) {
-    const item = btn.closest('.faq-item');
-    const isOpen = item.classList.contains('open');
-    // Close all
-    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
-    // Open clicked if it was closed
-    if (!isOpen) item.classList.add('open');
-  }
-</script>
-
-<script>
 (function () {
-  var burger = document.getElementById('navBurger');
-  var menu = document.getElementById('mobileMenu');
-  if (!burger || !menu) return;
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  function setOpen(open) {
-    burger.classList.toggle('open', open);
-    menu.classList.toggle('open', open);
-    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  // Scroll reveals
+  var revealEls = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -4% 0px" });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add("in"); });
   }
-  function isOpen() { return menu.classList.contains('open'); }
 
-  burger.addEventListener('click', function (e) {
-    e.stopPropagation();
-    setOpen(!isOpen());
+  // Accordion
+  document.querySelectorAll(".faq-q").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var item = btn.closest(".faq-item");
+      var open = item.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
   });
-  menu.querySelectorAll('a').forEach(function (a) {
-    a.addEventListener('click', function () { setOpen(false); });
+
+  /* ---------- Mobile menu ---------- */
+  var burger = document.getElementById("navBurger");
+  var mobileMenu = document.getElementById("mobileMenu");
+  function setMenu(open) {
+    document.body.classList.toggle("menu-open", open);
+    burger.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  burger.addEventListener("click", function () {
+    setMenu(!document.body.classList.contains("menu-open"));
   });
-  document.addEventListener('click', function (e) {
-    if (isOpen() && !menu.contains(e.target)) setOpen(false);
+  mobileMenu.querySelectorAll("a").forEach(function (a) {
+    a.addEventListener("click", function () { setMenu(false); });
   });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') setOpen(false);
+  mobileMenu.addEventListener("click", function (e) {
+    if (e.target === mobileMenu) setMenu(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setMenu(false);
+  });
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 700) setMenu(false);
   });
 })();
 </script>
-
 </body>
 </html>
