@@ -503,8 +503,8 @@ body.menu-open { overflow: hidden; }
         <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
       </button>
       <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
-        <p>Yes. When your screen locks, Knotch shows a dedicated overlay window on top of the lock screen with a gradient generated from the current track’s album art. Your desktop wallpaper is never changed.</p>
-        <p>The window is drawn at a level above the lock screen UI, which lets Knotch render there without system-level access or modifying anything on your Mac. It disappears instantly when you unlock.</p>
+        <p>Yes. When your screen locks, Knotch generates a gradient from the current track's album art and sets it as your desktop wallpaper — which macOS shows behind the lock screen UI. Your original wallpaper is restored the moment you unlock.</p>
+        <p>This is the only viable way to render content behind the macOS lock screen without system-level access. It's seamless in practice.</p>
       </div></div></div>
     </div>
 
@@ -571,8 +571,9 @@ body.menu-open { overflow: hidden; }
         <span class="faq-chev" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
       </button>
       <div class="faq-a"><div class="faq-a-clip"><div class="faq-a-inner">
-        <p>Knotch may request access to <strong>Calendars</strong> (to show today's events) and <strong>Automation</strong> (to control Spotify via AppleScript). Both are optional — you can decline and the rest of the app works fine.</p>
-        <p>No microphone, camera, contacts, location, or any other sensitive permission is ever requested.</p>
+        <p>Knotch may request access to <strong>Calendars and Reminders</strong> (to show today's events and scheduled reminders), <strong>Automation</strong> (to control Spotify and Apple Music via AppleScript), <strong>Camera</strong> (only if you enable the Mirror widget — nothing is ever recorded or stored), <strong>System Audio Recording</strong> (to drive the live waveform visualizer — audio is analyzed in real time, never captured or saved), and <strong>Bluetooth</strong> (to read battery levels of connected accessories like AirPods).</p>
+        <p>All of these are optional — decline any of them and the rest of the app works fine.</p>
+        <p>No microphone, contacts, location, or any other sensitive permission is ever requested.</p>
       </div></div></div>
     </div>
 
