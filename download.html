@@ -141,10 +141,10 @@ body.menu-open { overflow: hidden; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 26px;
+  justify-content: flex-start;
+  gap: 20px;
   text-align: center;
-  padding: 110px 6vw 90px;
+  padding: 96px 6vw 50px;
   position: relative;
 }
 .stage-glow {
@@ -156,7 +156,7 @@ body.menu-open { overflow: hidden; }
   pointer-events: none;
   filter: blur(6px);
 }
-.stage > * { position: relative; }
+.stage > *:not(.stage-glow) { position: relative; }
 
 /* App icon */
 .app-icon {
@@ -359,6 +359,9 @@ h1 {
 </main>
 
 <script>
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+window.scrollTo(0, 0);
+
 (async () => {
   const status = document.getElementById('status');
   const manual = document.getElementById('manual');
