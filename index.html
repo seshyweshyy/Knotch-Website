@@ -381,13 +381,29 @@ nav {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.3s var(--ease-spring), background 0.25s var(--ease-apple);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease-apple), transform 0.3s var(--ease-spring), background 0.25s var(--ease-apple);
   z-index: 4;
 }
 .gallery-arrow:hover { background: rgba(255, 255, 255, 0.14); transform: translateY(-50%) scale(1.08); }
 .gallery-arrow:active { transform: translateY(-50%) scale(0.92); }
 .gallery-arrow.prev { left: 14px; }
 .gallery-arrow.next { right: 14px; }
+
+/* Only reveal the arrows on hover for pointer devices; touch devices
+   (no real hover) keep them always visible since there's no hover state
+   to reveal them with. */
+@media (hover: hover) {
+  .gallery:hover .gallery-arrow,
+  .gallery-arrow:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+@media (hover: none) {
+  .gallery-arrow { opacity: 1; pointer-events: auto; }
+}
 
 .gallery-dots {
   margin-top: 22px;
@@ -1355,10 +1371,25 @@ body.menu-open { overflow: hidden; }
     function stopAutoplay() { clearInterval(autoplayTimer); }
     function restartAutoplay() { stopAutoplay(); startAutoplay(); }
 
+    var isHovering = false;
+    // Only resume if the mouse isn't still parked on the gallery and the
+    // tab is actually the one the person is looking at.
+    function resumeIfActive() {
+      if (!isHovering && !document.hidden && document.hasFocus()) startAutoplay();
+    }
+
     galleryTrack.addEventListener("pointerdown", stopAutoplay);
     galleryTrack.addEventListener("pointerup", restartAutoplay);
-    galleryTrack.addEventListener("mouseenter", stopAutoplay);
-    galleryTrack.addEventListener("mouseleave", startAutoplay);
+    galleryTrack.addEventListener("mouseenter", function () { isHovering = true; stopAutoplay(); });
+    galleryTrack.addEventListener("mouseleave", function () { isHovering = false; resumeIfActive(); });
+
+    // Don't burn cycles (or surprise the person) auto-advancing while the
+    // tab is backgrounded or another app is focused.
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) stopAutoplay(); else resumeIfActive();
+    });
+    window.addEventListener("blur", stopAutoplay);
+    window.addEventListener("focus", resumeIfActive);
 
     window.addEventListener("resize", function () {
       galleryTrack.scrollLeft = slides[current].offsetLeft;
