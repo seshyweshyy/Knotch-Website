@@ -22,6 +22,11 @@
   --blue-bright: #3380ff;
   --blue-soft: #6fa0ff;
   --edge: rgba(200, 230, 255, 0.35);
+  --nav-tint-a: rgba(246, 249, 255, 0.4);
+  --nav-tint-b: rgba(240, 245, 255, 0.26);
+  --nav-sheen-a: rgba(255, 255, 255, 0.55);
+  --nav-sheen-b: rgba(255, 255, 255, 0.1);
+  --nav-rim-c: rgba(255, 255, 255, 0.85);
   --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.35);
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -135,11 +140,11 @@ a:focus-visible, button:focus-visible {
   filter: url(#nav-lens);
   transform: translateZ(0);
 }
-.nav-tint  { background: linear-gradient(rgba(246, 249, 255, 0.4), rgba(240, 245, 255, 0.26)); }
+.nav-tint  { background: linear-gradient(var(--nav-tint-a), var(--nav-tint-b)); }
 .nav-sheen {
   background:
     linear-gradient(-58deg, transparent 34%, rgba(255, 255, 255, 0.32) 47% 51%, transparent 62%),
-    linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.1) 50%, transparent);
+    linear-gradient(var(--nav-sheen-a), var(--nav-sheen-b) 50%, transparent);
 }
 .nav-rim {
   box-shadow:
@@ -148,15 +153,24 @@ a:focus-visible, button:focus-visible {
     inset 0 -8px 14px -8px rgba(60, 110, 190, 0.14);
 }
 
-/* concave "ears" that make the bar melt into the top edge of the window */
+/* concave "ears" that make the bar melt into the top edge of the window.
+   They reuse the bar's tint, sheen and blur (via the --nav-* tokens) and get a
+   hairline rim along the curve so they read as part of the same glass. */
 .nav-ear {
   position: absolute;
   top: 0;
   width: var(--ear); height: var(--ear);
   pointer-events: none;
-  background: rgba(244, 248, 255, 0.32);
-  -webkit-backdrop-filter: blur(3px) saturate(160%);
-  backdrop-filter: blur(3px) saturate(160%);
+  background:
+    linear-gradient(var(--nav-sheen-a), var(--nav-sheen-b)),
+    linear-gradient(var(--nav-tint-a), var(--nav-tint-a));
+  -webkit-backdrop-filter: blur(3px) saturate(180%);
+  backdrop-filter: blur(3px) saturate(180%);
+}
+.nav-ear::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 .nav-ear.l {
   right: 100%;
@@ -168,6 +182,8 @@ a:focus-visible, button:focus-visible {
   -webkit-mask-image: radial-gradient(circle at 100% 100%, transparent calc(var(--ear) - 0.5px), #000 var(--ear));
   mask-image: radial-gradient(circle at 100% 100%, transparent calc(var(--ear) - 0.5px), #000 var(--ear));
 }
+.nav-ear.l::after { background: radial-gradient(circle at 0 100%, transparent calc(var(--ear) - 0.5px), var(--nav-rim-c) calc(var(--ear) + 0.2px), transparent calc(var(--ear) + 1.6px)); }
+.nav-ear.r::after { background: radial-gradient(circle at 100% 100%, transparent calc(var(--ear) - 0.5px), var(--nav-rim-c) calc(var(--ear) + 0.2px), transparent calc(var(--ear) + 1.6px)); }
 
 .nav-content {
   position: relative;
@@ -1254,181 +1270,183 @@ footer { margin-top: clamp(48px, 7vw, 90px); padding: 8px 4px 0; }
 }
 
 /* ================================================================
-   8. Dark theme — same glass recipe, lit from behind.
+   8. Dark theme (follows the system setting) — same glass recipe, lit from behind.
    Rims flip from deep-blue to white, insets swap highlight/shade.
    ================================================================ */
 
-:root {
-  color-scheme: dark;
-  --ink: #f4f7fc;
-  --ink-2: #c9d1e0;
-  --mute: #8f99ac;
-  --faint: #6c7689;
-  --canvas: #05070c;
-  --blue: #6fa0ff;
-  --edge: rgba(255, 255, 255, 0.1);
-}
-body { background: var(--canvas); }
-::selection { background: rgba(111, 160, 255, 0.35); }
+@media (prefers-color-scheme: dark) {
 
-.subhead { color: #7d879a; }
-.subhead b, .subhead strong { color: #c6cedc; }
-.tone { color: #6b7588; }
-.grad-text { background: linear-gradient(96deg, #8ab4ff 0%, #4c8dff 55%, #2e6be8 100%); -webkit-background-clip: text; background-clip: text; }
-.link-more { color: #7aa8ff; }
-a:focus-visible, button:focus-visible { outline-color: rgba(138, 180, 255, 0.85); }
+  :root {
+    color-scheme: dark;
+    --ink: #f4f7fc;
+    --ink-2: #c9d1e0;
+    --mute: #8f99ac;
+    --faint: #6c7689;
+    --canvas: #05070c;
+    --blue: #6fa0ff;
+    --edge: rgba(255, 255, 255, 0.1);
+    --nav-tint-a: rgba(24, 30, 46, 0.5);
+    --nav-tint-b: rgba(14, 18, 30, 0.38);
+    --nav-sheen-a: rgba(255, 255, 255, 0.14);
+    --nav-sheen-b: rgba(255, 255, 255, 0.03);
+    --nav-rim-c: rgba(190, 210, 255, 0.4);
+  }
+  body { background: var(--canvas); }
+  ::selection { background: rgba(111, 160, 255, 0.35); }
 
-/* nav */
-.nav-shell {
-  box-shadow: 0 14px 34px -14px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-.nav-tint  { background: linear-gradient(rgba(24, 30, 46, 0.5), rgba(14, 18, 30, 0.38)); }
-.nav-sheen {
-  background:
-    linear-gradient(-58deg, transparent 34%, rgba(255, 255, 255, 0.09) 47% 51%, transparent 62%),
-    linear-gradient(rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03) 50%, transparent);
-}
-.nav-rim {
-  box-shadow:
-    inset 0 -1.5px 1px rgba(255, 255, 255, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 0 0 1px rgba(150, 185, 255, 0.16),
-    inset 0 -8px 14px -8px rgba(90, 140, 255, 0.16);
-}
-.nav-ear { background: rgba(20, 26, 40, 0.45); }
-.nav-mark { color: var(--ink); }
-.nav-links a { color: #dfe6f3; }
-.nav-links a:not(.nav-cta):hover, .nav-links a.current { color: #8ab4ff; }
-.nav-cta {
-  color: #0b1220 !important;
-  background: linear-gradient(-75deg, #e4e9f4, #ffffff 55%, #e4e9f4);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), 0 4px 12px -3px rgba(0, 0, 0, 0.6);
-}
-.nav-app-icon { box-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
-.mobile-menu { background: rgba(8, 11, 20, 0.8); }
-.mobile-menu a { border-bottom-color: rgba(255, 255, 255, 0.09); }
+  .subhead { color: #7d879a; }
+  .subhead b, .subhead strong { color: #c6cedc; }
+  .tone { color: #6b7588; }
+  .grad-text { background: linear-gradient(96deg, #8ab4ff 0%, #4c8dff 55%, #2e6be8 100%); -webkit-background-clip: text; background-clip: text; }
+  .link-more { color: #7aa8ff; }
+  a:focus-visible, button:focus-visible { outline-color: rgba(138, 180, 255, 0.85); }
 
-/* button */
-.gbtn {
-  color: #f2f5fb;
-  background: linear-gradient(-75deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
-  box-shadow:
-    inset 0 2px 2px rgba(255, 255, 255, 0.1),
-    inset 0 -2px 2px rgba(0, 0, 0, 0.3),
-    0 4px 2px -2px rgba(0, 0, 0, 0.6),
-    inset 0 0 1.6px 4px rgba(255, 255, 255, 0.05);
-}
-.gbtn:hover {
-  box-shadow:
-    inset 0 2px 2px rgba(255, 255, 255, 0.1),
-    inset 0 -2px 2px rgba(0, 0, 0, 0.3),
-    0 2.4px 0.8px -1.6px rgba(0, 0, 0, 0.6),
-    inset 0 0 0.8px 1.6px rgba(255, 255, 255, 0.16);
-}
-.gbtn > span { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35); }
-.gbtn::after, .gkey::after, .gstat::after, .gbadge::after {
-  background:
-    conic-gradient(from var(--a1, -30deg) at 50% 50%,
-      rgba(255, 255, 255, 0.5), rgba(180, 210, 255, 0.06) 5% 40%,
-      rgba(255, 255, 255, 0.5) 50%, rgba(180, 210, 255, 0.06) 60% 95%,
-      rgba(255, 255, 255, 0.5)),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.1));
-}
-.gbtn > span::after, .gkey > span::after, .gstat > span::after {
-  background: linear-gradient(var(--a2), transparent 0, rgba(255, 255, 255, 0.3) 40% 50%, transparent 55%);
-  background-size: 200% 200%;
-  background-position: 0 0;
-  background-repeat: no-repeat;
-}
-.gbtn-shadow::after, .gkey-shadow::after { background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.3)); }
-.gbtn.is-dark {
-  color: #0b1220;
-  background: linear-gradient(-75deg, #dfe5f1, #ffffff 55%, #dfe5f1);
-}
-/* the blue-card CTA stays glass-on-blue */
-.gbtn.is-onblue { color: #fff; }
+  /* nav */
+  .nav-shell {
+    box-shadow: 0 14px 34px -14px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+  .nav-tint  { background: linear-gradient(rgba(24, 30, 46, 0.5), rgba(14, 18, 30, 0.38)); }
+  .nav-rim {
+    box-shadow:
+      inset 0 -1.5px 1px rgba(255, 255, 255, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 0 0 1px rgba(150, 185, 255, 0.16),
+      inset 0 -8px 14px -8px rgba(90, 140, 255, 0.16);
+  }
+  .nav-mark { color: var(--ink); }
+  .nav-links a { color: #dfe6f3; }
+  .nav-links a:not(.nav-cta):hover, .nav-links a.current { color: #8ab4ff; }
+  .nav-cta {
+    color: #0b1220 !important;
+    background: linear-gradient(-75deg, #e4e9f4, #ffffff 55%, #e4e9f4);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), 0 4px 12px -3px rgba(0, 0, 0, 0.6);
+  }
+  .nav-app-icon { box-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
+  .mobile-menu { background: rgba(8, 11, 20, 0.8); }
+  .mobile-menu a { border-bottom-color: rgba(255, 255, 255, 0.09); }
 
-/* hero key */
-.gkey {
-  background: linear-gradient(-75deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06));
-  box-shadow:
-    inset 0 2px 2px rgba(255, 255, 255, 0.12),
-    inset 0 -2px 2px rgba(0, 0, 0, 0.3),
-    0 6px 4px -3px rgba(0, 0, 0, 0.7),
-    inset 0 0 1.6px 4px rgba(255, 255, 255, 0.05);
-}
-.gkey img { box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.6); }
+  /* button */
+  .gbtn {
+    color: #f2f5fb;
+    background: linear-gradient(-75deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+    box-shadow:
+      inset 0 2px 2px rgba(255, 255, 255, 0.1),
+      inset 0 -2px 2px rgba(0, 0, 0, 0.3),
+      0 4px 2px -2px rgba(0, 0, 0, 0.6),
+      inset 0 0 1.6px 4px rgba(255, 255, 255, 0.05);
+  }
+  .gbtn:hover {
+    box-shadow:
+      inset 0 2px 2px rgba(255, 255, 255, 0.1),
+      inset 0 -2px 2px rgba(0, 0, 0, 0.3),
+      0 2.4px 0.8px -1.6px rgba(0, 0, 0, 0.6),
+      inset 0 0 0.8px 1.6px rgba(255, 255, 255, 0.16);
+  }
+  .gbtn > span { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35); }
+  .gbtn::after, .gkey::after, .gstat::after, .gbadge::after {
+    background:
+      conic-gradient(from var(--a1, -30deg) at 50% 50%,
+        rgba(255, 255, 255, 0.5), rgba(180, 210, 255, 0.06) 5% 40%,
+        rgba(255, 255, 255, 0.5) 50%, rgba(180, 210, 255, 0.06) 60% 95%,
+        rgba(255, 255, 255, 0.5)),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.1));
+  }
+  .gbtn > span::after, .gkey > span::after, .gstat > span::after {
+    background: linear-gradient(var(--a2), transparent 0, rgba(255, 255, 255, 0.3) 40% 50%, transparent 55%);
+    background-size: 200% 200%;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+  }
+  .gbtn-shadow::after, .gkey-shadow::after { background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.3)); }
+  .gbtn.is-dark {
+    color: #0b1220;
+    background: linear-gradient(-75deg, #dfe5f1, #ffffff 55%, #dfe5f1);
+  }
+  /* the blue-card CTA stays glass-on-blue */
+  .gbtn.is-onblue { color: #fff; }
 
-/* static glass + badges */
-.gstat {
-  background: linear-gradient(-75deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
-  box-shadow:
-    inset 0 2px 2px rgba(255, 255, 255, 0.1),
-    inset 0 -2px 2px rgba(0, 0, 0, 0.3),
-    0 4px 2px -2px rgba(0, 0, 0, 0.55),
-    inset 0 0 1.6px 3px rgba(255, 255, 255, 0.05);
-}
-.gbadge {
-  color: #eaf0fc;
-  background: linear-gradient(-75deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
-  box-shadow:
-    inset 0 2px 2px rgba(255, 255, 255, 0.1),
-    inset 0 -2px 2px rgba(0, 0, 0, 0.3),
-    0 6px 12px -4px rgba(0, 0, 0, 0.6),
-    inset 0 0 1.6px 4px rgba(255, 255, 255, 0.05);
-}
-.gbadge::before { background: linear-gradient(135deg, transparent 0 70%, rgba(255, 255, 255, 0.22) 85% 88%, transparent 96%); }
+  /* hero key */
+  .gkey {
+    background: linear-gradient(-75deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06));
+    box-shadow:
+      inset 0 2px 2px rgba(255, 255, 255, 0.12),
+      inset 0 -2px 2px rgba(0, 0, 0, 0.3),
+      0 6px 4px -3px rgba(0, 0, 0, 0.7),
+      inset 0 0 1.6px 4px rgba(255, 255, 255, 0.05);
+  }
+  .gkey img { box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.6); }
 
-/* panels */
-.gpanel {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0.025) 50%, rgba(255, 255, 255, 0.06) 100%);
-  box-shadow:
-    0 4px 6px rgba(0, 0, 0, 0.25),
-    inset 0 1px 1px rgba(255, 255, 255, 0.16),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.05),
-    0 18px 40px -8px rgba(0, 0, 0, 0.55),
-    inset 0 0 0 1px rgba(150, 185, 255, 0.1);
-}
-.gpanel::after { background: linear-gradient(rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 60%, transparent 100%); }
-.gpanel:hover {
-  box-shadow:
-    0 6px 10px rgba(0, 0, 0, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.2),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.07),
-    0 26px 50px -8px rgba(0, 0, 0, 0.65),
-    inset 0 0 0 1px rgba(150, 190, 255, 0.24);
-}
-.gpanel.on-blue {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.07) 50%, rgba(255, 255, 255, 0.16));
-}
+  /* static glass + badges */
+  .gstat {
+    background: linear-gradient(-75deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+    box-shadow:
+      inset 0 2px 2px rgba(255, 255, 255, 0.1),
+      inset 0 -2px 2px rgba(0, 0, 0, 0.3),
+      0 4px 2px -2px rgba(0, 0, 0, 0.55),
+      inset 0 0 1.6px 3px rgba(255, 255, 255, 0.05);
+  }
+  .gbadge {
+    color: #eaf0fc;
+    background: linear-gradient(-75deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    box-shadow:
+      inset 0 2px 2px rgba(255, 255, 255, 0.1),
+      inset 0 -2px 2px rgba(0, 0, 0, 0.3),
+      0 6px 12px -4px rgba(0, 0, 0, 0.6),
+      inset 0 0 1.6px 4px rgba(255, 255, 255, 0.05);
+  }
+  .gbadge::before { background: linear-gradient(135deg, transparent 0 70%, rgba(255, 255, 255, 0.22) 85% 88%, transparent 96%); }
 
-/* background glow */
-.aurora i { filter: blur(90px); opacity: 0.4; }
-.aurora i:nth-child(1) { background: #163a86; }
-.aurora i:nth-child(2) { background: #0e2a66; }
-.aurora i:nth-child(3) { background: #1a48a0; }
+  /* panels */
+  .gpanel {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0.025) 50%, rgba(255, 255, 255, 0.06) 100%);
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.25),
+      inset 0 1px 1px rgba(255, 255, 255, 0.16),
+      inset 0 -1px 1px rgba(255, 255, 255, 0.05),
+      0 18px 40px -8px rgba(0, 0, 0, 0.55),
+      inset 0 0 0 1px rgba(150, 185, 255, 0.1);
+  }
+  .gpanel::after { background: linear-gradient(rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 60%, transparent 100%); }
+  .gpanel:hover {
+    box-shadow:
+      0 6px 10px rgba(0, 0, 0, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2),
+      inset 0 -1px 1px rgba(255, 255, 255, 0.07),
+      0 26px 50px -8px rgba(0, 0, 0, 0.65),
+      inset 0 0 0 1px rgba(150, 190, 255, 0.24);
+  }
+  .gpanel.on-blue {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.07) 50%, rgba(255, 255, 255, 0.16));
+  }
 
-/* blue cards sit a touch deeper against the dark canvas */
-.sky { box-shadow: 0 30px 80px -30px rgba(20, 90, 220, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.14); }
+  /* background glow */
+  .aurora i { filter: blur(90px); opacity: 0.4; }
+  .aurora i:nth-child(1) { background: #163a86; }
+  .aurora i:nth-child(2) { background: #0e2a66; }
+  .aurora i:nth-child(3) { background: #1a48a0; }
 
-/* faq teaser */
-.faq-teaser summary::after { border-color: var(--mute); }
+  /* blue cards sit a touch deeper against the dark canvas */
+  .sky { box-shadow: 0 30px 80px -30px rgba(20, 90, 220, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.14); }
 
-/* footer */
-.foot-copy { border-top-color: rgba(255, 255, 255, 0.08); }
-.foot-col a:hover { color: #8ab4ff; }
+  /* faq teaser */
+  .faq-teaser summary::after { border-color: var(--mute); }
 
-/* widget demos */
-.hud-pill { background: #000; box-shadow: 0 14px 30px -8px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.14); }
-.wave-notch { box-shadow: 0 16px 30px -8px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.1); }
-.shelf-chip {
-  color: #e8eefb;
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  /* footer */
+  .foot-copy { border-top-color: rgba(255, 255, 255, 0.08); }
+  .foot-col a:hover { color: #8ab4ff; }
+
+  /* widget demos */
+  .hud-pill { background: #000; box-shadow: 0 14px 30px -8px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.14); }
+  .wave-notch { box-shadow: 0 16px 30px -8px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.1); }
+  .shelf-chip {
+    color: #e8eefb;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  }
+  .widget-tile {
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 6px 14px -8px rgba(0, 0, 0, 0.6);
+  }
+  .batt-shell { background: rgba(255, 255, 255, 0.14); }
+  .lock-vis { box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.16); }
 }
-.widget-tile {
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 6px 14px -8px rgba(0, 0, 0, 0.6);
-}
-.batt-shell { background: rgba(255, 255, 255, 0.14); }
-.lock-vis { box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.16); }
