@@ -1,0 +1,238 @@
+/* ================================================================
+   KNOTCH — sub-page components (FAQ, Privacy, Download)
+   Builds on styles.css; every card here is a .gpanel.
+   ================================================================ */
+
+@view-transition { navigation: auto; }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+
+/* ---------- page hero + layout ---------- */
+
+.page-hero {
+  position: relative;
+  padding: 160px 4px 34px;
+  text-align: center;
+}
+.page-hero .eyebrow { margin-bottom: 18px; }
+.page-hero .headline { position: relative; }
+.page-hero .subhead { max-width: 30em; margin: 0.9em auto 0; position: relative; }
+
+.page {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 4px 40px;
+}
+
+.inline-note {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  color: #2350b8;
+  background: rgba(46, 107, 232, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(46, 107, 232, 0.16);
+  border-radius: 7px;
+  padding: 2px 7px;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+/* ---------- FAQ accordion ---------- */
+
+.faq-category { margin: 56px 0 18px; }
+.faq-category:first-child { margin-top: 24px; }
+.faq-group { display: flex; flex-direction: column; gap: 12px; }
+
+.faq-item { border-radius: 1.5rem; overflow: hidden; }
+.faq-item:hover { transform: none; }
+.faq-item.open { box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.03),
+    inset 0 1px 1px rgba(255, 255, 255, 0.75),
+    0 16px 36px -8px rgba(30, 80, 190, 0.16),
+    inset 0 0 0 1px rgba(76, 134, 255, 0.4); }
+
+.faq-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  text-align: left;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--ink);
+  font-size: 1.08rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  padding: 20px 26px;
+}
+.faq-q:focus-visible { outline: none; box-shadow: inset 0 0 0 3px rgba(46, 107, 232, 0.5); border-radius: 1.5rem; }
+
+.faq-chev {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  color: var(--mute);
+  background: rgba(11, 18, 32, 0.05);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.5s var(--ease-spring), background 0.3s, color 0.3s;
+}
+.faq-item.open .faq-chev { transform: rotate(180deg); background: rgba(46, 107, 232, 0.14); color: var(--blue); }
+.faq-chev svg { display: block; }
+
+.faq-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.55s var(--ease-out); }
+.faq-item.open .faq-a { grid-template-rows: 1fr; }
+.faq-a-clip { overflow: hidden; min-height: 0; }
+.faq-a-inner {
+  padding: 0 26px 24px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  letter-spacing: -0.012em;
+  color: var(--mute);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+}
+.faq-item.open .faq-a-inner { opacity: 1; transform: none; transition-delay: 0.12s; }
+.faq-a-inner strong { color: var(--ink); font-weight: 600; }
+.faq-a-inner a { color: var(--blue); text-decoration: none; }
+.faq-a-inner a:hover { text-decoration: underline; }
+
+/* ---------- Privacy ---------- */
+
+.tldr-card { padding: 30px 32px; margin-top: 24px; overflow: hidden; }
+.tldr-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+.tldr-badge {
+  border-radius: 999px;
+  height: 30px;
+  padding-inline: 14px;
+  color: #1d47a8;
+  background: linear-gradient(-75deg, rgba(76, 141, 255, 0.2), rgba(130, 185, 255, 0.42), rgba(76, 141, 255, 0.2));
+}
+.tldr-badge > span { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; }
+.tldr-header-text { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; }
+.tldr-items { display: flex; flex-direction: column; gap: 14px; }
+.tldr-item { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.5; color: var(--ink-2); letter-spacing: -0.01em; }
+.tldr-check {
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  margin-top: -1px;
+  background: linear-gradient(-75deg, rgba(76, 141, 255, 0.14), rgba(140, 190, 255, 0.34), rgba(76, 141, 255, 0.14));
+}
+.tldr-check svg { width: 12px; height: 12px; }
+.tldr-check svg path { stroke: #1f5ad8; stroke-width: 2; }
+
+.policy-section { margin-top: 58px; }
+.policy-section h2 { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.045em; margin-bottom: 14px; }
+.policy-section p { font-size: 16.5px; line-height: 1.65; letter-spacing: -0.012em; color: var(--mute); }
+.policy-section p + p { margin-top: 14px; }
+.policy-section a { color: var(--blue); text-decoration: none; }
+.policy-section a:hover { text-decoration: underline; }
+.policy-date { margin-top: 44px; font-size: 12.5px; color: var(--faint); text-align: center; }
+
+/* ---------- Contact card (FAQ + Privacy) ---------- */
+
+.contact-card {
+  margin-top: 72px;
+  padding: 34px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+.contact-card h2, .contact-card h3 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.04em; margin-bottom: 6px; }
+.contact-card p { font-size: 15px; color: var(--mute); max-width: 40ch; letter-spacing: -0.01em; }
+.contact-card p a { color: var(--blue); text-decoration: none; }
+.contact-card p a:hover { text-decoration: underline; }
+.contact-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.contact-card .gbtn { height: 52px; min-width: 0; }
+.contact-card .gbtn > span { font-size: 1rem; padding-inline: 1.5em; }
+
+/* ---------- Download page ---------- */
+
+body.is-download main.stage { min-height: calc(100svh - 120px); }
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+  padding: 130px 4px 30px;
+  position: relative;
+}
+.stage > * { position: relative; }
+
+.app-icon {
+  width: 92px; height: 92px;
+  border-radius: 22px;
+  box-shadow: 0 16px 34px -10px rgba(30, 80, 200, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.6);
+  animation: rise 1s var(--ease-out) 0.1s both, breathe 3.2s ease-in-out 1.2s infinite alternate;
+}
+@keyframes breathe {
+  from { box-shadow: 0 16px 34px -10px rgba(30, 80, 200, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.6); }
+  to   { box-shadow: 0 20px 42px -10px rgba(30, 80, 200, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.6); }
+}
+.stage h1 { animation: rise 1s var(--ease-out) 0.22s both; }
+.lede { font-size: 1.05rem; line-height: 1.55; color: var(--mute); max-width: 40ch; letter-spacing: -0.015em; animation: rise 1s var(--ease-out) 0.34s both; }
+
+.status {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 28px; font-size: 14px; color: var(--mute);
+  animation: rise 1s var(--ease-out) 0.46s both;
+}
+.spinner {
+  width: 18px; height: 18px; flex-shrink: 0;
+  border: 2px solid rgba(46, 107, 232, 0.2);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.manual-link { font-size: 14px; color: var(--mute); display: none; animation: rise 0.7s var(--ease-out) both; }
+.manual-link a { display: inline-flex; align-items: center; gap: 5px; color: var(--blue); text-decoration: none; }
+.manual-link a:hover { text-decoration: underline; }
+.manual-link .chev { font-weight: 600; }
+
+.stage .dl-note {
+  margin: 14px 0 0;
+  max-width: min(560px, 100%);
+  padding: 22px 26px;
+  border-radius: 1.6rem;
+  display: flex; flex-direction: column; gap: 12px;
+  text-align: left;
+  animation: rise 1s var(--ease-out) 0.58s both;
+}
+.stage .dl-note-title { display: flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; letter-spacing: -0.02em; }
+.stage .dl-note p { font-size: 13.5px; color: var(--mute); line-height: 1.55; }
+.stage .dl-note code {
+  display: block;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #dff0ff;
+  background: #10162a;
+  border-radius: 12px;
+  padding: 11px 14px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.stage .dl-note-title svg circle, .stage .dl-note-title svg path { stroke: #2e6be8; }
+
+.stage .gbtn-wrap { animation: rise 1s var(--ease-out) 0.68s both; margin-top: 8px; }
+.stage .gbtn { height: 48px; min-width: 0; }
+.stage .gbtn > span { font-size: 0.98rem; padding-inline: 1.4em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: spin 0.8s linear infinite !important; }
+}

@@ -7,314 +7,51 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="images/icon.png">
 <meta name="description" content="Fetching the latest Knotch release from GitHub.">
-<style>
-/* Knotch design system — shared tokens (matches index.html) */
-
-/* smooth cross-fade between pages (View Transitions, progressive enhancement) */
-@view-transition { navigation: auto; }
-@media (prefers-reduced-motion: reduce) {
-  @view-transition { navigation: none; }
-}
-
-:root {
-  --ink: #f5f5f7;
-  --mute: #86868b;
-  --faint: #515154;
-  --canvas: #000000;
-  --card: #111113;
-  --card-edge: rgba(255, 255, 255, 0.065);
-  --blue: #4c86ff;
-  --blue-deep: #2e6be8;
-  --glass: rgba(18, 18, 20, 0.72);
-  --grad: linear-gradient(96deg, #6fa0ff 0%, #3380ff 55%, #1e5ad6 100%);
-  --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
-  --ease-spring: cubic-bezier(0.32, 1.35, 0.42, 1);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-html { overflow-x: hidden; }
-
-body {
-  background: var(--canvas);
-  color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-}
-
-::selection { background: rgba(51, 128, 255, 0.35); }
-
-/* Nav */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 130;
-  height: 52px;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--glass);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-.nav-inner {
-  width: min(1024px, 92vw);
-  display: flex; align-items: center; justify-content: space-between; gap: 24px;
-}
-.nav-mark {
-  display: flex; align-items: center; gap: 9px;
-  font-size: 17px; font-weight: 600; letter-spacing: -0.01em;
-  color: var(--ink); text-decoration: none;
-  transition: opacity 0.25s var(--ease-apple);
-}
-.nav-mark:hover { opacity: 0.75; }
-.nav-app-icon {
-  width: 20px; height: 20px;
-  border-radius: 5px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-}
-.nav-links { display: flex; align-items: center; gap: 30px; }
-.nav-links a {
-  font-size: 13px; color: rgba(245, 245, 247, 0.8);
-  text-decoration: none; letter-spacing: -0.01em;
-  transition: color 0.25s var(--ease-apple);
-}
-.nav-links a:hover { color: var(--ink); }
-@media (max-width: 700px) { .nav-links a { display: none; } }
-
-/* Mobile menu (Apple-style) */
-.nav-burger {
-  display: none;
-  border: none; background: transparent; cursor: pointer;
-  width: 40px; height: 40px;
-  margin-right: -8px;
-  position: relative; z-index: 120; flex-shrink: 0;
-}
-.nav-burger span {
-  position: absolute; left: 11px; right: 11px;
-  height: 1.5px; border-radius: 2px;
-  background: var(--ink);
-  transition: transform 0.45s var(--ease-apple), top 0.45s var(--ease-apple);
-}
-.nav-burger span:nth-child(1) { top: 16.5px; }
-.nav-burger span:nth-child(2) { top: 23.5px; }
-body.menu-open .nav-burger span:nth-child(1) { top: 20px; transform: rotate(45deg); }
-body.menu-open .nav-burger span:nth-child(2) { top: 20px; transform: rotate(-45deg); }
-
-.mobile-menu {
-  position: fixed; inset: 0; z-index: 110;
-  background: rgba(8, 8, 10, 0.82);
-  -webkit-backdrop-filter: saturate(180%) blur(26px);
-  backdrop-filter: saturate(180%) blur(26px);
-  padding: 108px 9vw 40px;
-  display: flex; flex-direction: column;
-  opacity: 0; visibility: hidden;
-  transition: opacity 0.45s var(--ease-apple), visibility 0s linear 0.45s;
-}
-body.menu-open .mobile-menu {
-  opacity: 1; visibility: visible;
-  transition: opacity 0.45s var(--ease-apple), visibility 0s;
-}
-.mobile-menu a {
-  font-size: 27px; font-weight: 600; letter-spacing: -0.02em;
-  color: var(--ink); text-decoration: none;
-  padding: 15px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  opacity: 0; transform: translateY(16px);
-  transition: opacity 0.5s var(--ease-apple), transform 0.5s var(--ease-apple);
-}
-.mobile-menu a:active { color: var(--blue); }
-body.menu-open .mobile-menu a { opacity: 1; transform: translateY(0); }
-body.menu-open .mobile-menu a:nth-child(1) { transition-delay: 0.06s; }
-body.menu-open .mobile-menu a:nth-child(2) { transition-delay: 0.11s; }
-body.menu-open .mobile-menu a:nth-child(3) { transition-delay: 0.16s; }
-body.menu-open .mobile-menu a:nth-child(4) { transition-delay: 0.21s; }
-body.menu-open { overflow: hidden; }
-@media (max-width: 700px) { .nav-burger { display: block; } }
-@media (min-width: 701px) { .mobile-menu { display: none; } }
-
-/* Centered stage */
-.stage {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 20px;
-  text-align: center;
-  padding: 96px 6vw 50px;
-  position: relative;
-}
-.stage-glow {
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 100vw; height: 70vh;
-  background:
-    radial-gradient(ellipse 42% 48% at 45% 32%, rgba(51, 128, 255, 0.14), transparent 68%),
-    radial-gradient(ellipse 40% 44% at 58% 28%, rgba(30, 90, 214, 0.12), transparent 66%);
-  pointer-events: none;
-  filter: blur(6px);
-}
-.stage > *:not(.stage-glow) { position: relative; }
-
-/* App icon */
-.app-icon {
-  width: 84px; height: 84px;
-  border-radius: 20px;
-  box-shadow: 0 18px 46px rgba(51, 128, 255, 0.35);
-  animation: rise 1s var(--ease-apple) 0.1s both, breathe 3.2s ease-in-out 1.2s infinite alternate;
-}
-@keyframes breathe {
-  from { box-shadow: 0 18px 46px rgba(51, 128, 255, 0.3); }
-  to   { box-shadow: 0 22px 60px rgba(51, 128, 255, 0.5); }
-}
-
-h1 {
-  font-size: clamp(36px, 6vw, 60px);
-  line-height: 1.06;
-  font-weight: 700;
-  letter-spacing: -0.024em;
-  animation: rise 1s var(--ease-apple) 0.22s both;
-}
-.grad-text {
-  background: var(--grad);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.lede {
-  font-size: 16px;
-  line-height: 1.55;
-  color: var(--mute);
-  max-width: 40ch;
-  animation: rise 1s var(--ease-apple) 0.34s both;
-}
-
-@keyframes rise {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Status */
-.status {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 28px;
-  font-size: 13.5px;
-  color: var(--mute);
-  animation: rise 1s var(--ease-apple) 0.46s both;
-}
-.spinner {
-  width: 18px; height: 18px;
-  border: 2px solid rgba(76, 134, 255, 0.22);
-  border-top-color: var(--blue);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  flex-shrink: 0;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.manual-link {
-  font-size: 13.5px;
-  color: var(--mute);
-  display: none;
-  animation: rise 0.7s var(--ease-apple) both;
-}
-.manual-link a {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--blue);
-  text-decoration: none;
-}
-.manual-link a:hover { text-decoration: underline; }
-.manual-link .chev { font-weight: 600; }
-
-/* First-launch tip */
-.dl-note {
-  margin-top: 14px;
-  display: inline-flex;
-  flex-direction: column;
-  gap: 12px;
-  text-align: left;
-  background: var(--card);
-  border: 1px solid var(--card-edge);
-  border-radius: 18px;
-  padding: 20px 24px;
-  max-width: min(540px, 100%);
-  animation: rise 1s var(--ease-apple) 0.58s both;
-}
-.dl-note-title {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 13.5px; font-weight: 600;
-}
-.dl-note p { font-size: 13px; color: var(--mute); line-height: 1.55; }
-.dl-note code {
-  font-family: "SF Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12px;
-  color: #9fd0ff;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  padding: 10px 14px;
-  display: block;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-/* Back pill */
-.back {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  text-decoration: none;
-  background: rgba(255, 255, 255, 0.09);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 980px;
-  padding: 10px 20px;
-  margin-top: 8px;
-  transition: transform 0.35s var(--ease-spring), background 0.3s var(--ease-apple);
-  animation: rise 1s var(--ease-apple) 0.68s both;
-}
-.back:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-1px); }
-.back:active { transform: scale(0.96); }
-.back svg { display: block; }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  .spinner { animation: spin 0.8s linear infinite !important; }
-}
-</style>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="pages.css">
 </head>
-<body>
+<body class="is-download">
 
-<nav>
-  <div class="nav-inner">
-    <a class="nav-mark" href="index.html" aria-label="Knotch home">
-      <img class="nav-app-icon" src="images/icon.png" alt="" aria-hidden="true">
-      Knotch
-    </a>
-    <div class="nav-links">
-      <a href="index.html#music">Music</a>
-      <a href="index.html#features">Features</a>
-      <a href="faq.html">FAQ</a>
-      <a href="privacy.html">Privacy</a>
+<svg class="lens-defs" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<filter id="nav-lens" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22704%22%20height%3D%2276%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%280%2C0%2C0%29%22%2F%3E%3Cstop%20offset%3D%220.011%22%20stop-color%3D%22rgb%2864%2C64%2C64%29%22%2F%3E%3Cstop%20offset%3D%220.022%22%20stop-color%3D%22rgb%28104%2C104%2C104%29%22%2F%3E%3Cstop%20offset%3D%220.033%22%20stop-color%3D%22rgb%28123%2C123%2C123%29%22%2F%3E%3Cstop%20offset%3D%220.044%22%20stop-color%3D%22rgb%28128%2C128%2C128%29%22%2F%3E%3Cstop%20offset%3D%220.956%22%20stop-color%3D%22rgb%28128%2C128%2C128%29%22%2F%3E%3Cstop%20offset%3D%220.967%22%20stop-color%3D%22rgb%28133%2C133%2C133%29%22%2F%3E%3Cstop%20offset%3D%220.978%22%20stop-color%3D%22rgb%28152%2C152%2C152%29%22%2F%3E%3Cstop%20offset%3D%220.989%22%20stop-color%3D%22rgb%28192%2C192%2C192%29%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22704%22%20height%3D%2276%22%20fill%3D%22url%28%23g%29%22%2F%3E%3C%2Fsvg%3E" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="rampX"/>
+<feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22704%22%20height%3D%2276%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22rgb%28128%2C128%2C128%29%22%2F%3E%3Cstop%20offset%3D%220.1%22%20stop-color%3D%22rgb%28128%2C128%2C128%29%22%2F%3E%3Cstop%20offset%3D%220.325%22%20stop-color%3D%22rgb%28133%2C133%2C133%29%22%2F%3E%3Cstop%20offset%3D%220.55%22%20stop-color%3D%22rgb%28152%2C152%2C152%29%22%2F%3E%3Cstop%20offset%3D%220.775%22%20stop-color%3D%22rgb%28192%2C192%2C192%29%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22rgb%28255%2C255%2C255%29%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22704%22%20height%3D%2276%22%20fill%3D%22url%28%23g%29%22%2F%3E%3C%2Fsvg%3E" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="rampY"/>
+<feColorMatrix in="rampX" type="matrix" result="mapX" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1"/>
+<feColorMatrix in="rampY" type="matrix" result="mapY" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 0 1"/>
+<feComposite in="mapX" in2="mapY" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="map"/>
+<feDisplacementMap in="SourceGraphic" in2="map" scale="40" xChannelSelector="R" yChannelSelector="G" result="lensR"/>
+<feDisplacementMap in="SourceGraphic" in2="map" scale="38" xChannelSelector="R" yChannelSelector="G" result="lensG"/>
+<feDisplacementMap in="SourceGraphic" in2="map" scale="36" xChannelSelector="R" yChannelSelector="G" result="lensB"/>
+<feColorMatrix in="lensR" type="matrix" result="onlyR" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"/>
+<feColorMatrix in="lensG" type="matrix" result="onlyG" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0"/>
+<feColorMatrix in="lensB" type="matrix" result="onlyB" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+<feBlend in="onlyR" in2="onlyG" mode="lighten" result="lensRG"/>
+<feBlend in="lensRG" in2="onlyB" mode="lighten"/>
+</filter></defs></svg>
+<nav class="nav-root" aria-label="Main">
+  <div class="nav-shell">
+    <span class="nav-ear l" aria-hidden="true"></span>
+    <span class="nav-ear r" aria-hidden="true"></span>
+    <div class="nav-glass" aria-hidden="true"></div>
+    <div class="nav-tint" aria-hidden="true"></div>
+    <div class="nav-sheen" aria-hidden="true"></div>
+    <div class="nav-rim" aria-hidden="true"></div>
+    <div class="nav-content">
+      <a class="nav-mark" href="index.html" aria-label="Knotch home">
+        <img class="nav-app-icon" src="images/icon.png" alt="" aria-hidden="true">
+        Knotch
+      </a>
+      <div class="nav-links">
+        <a href="index.html#music">Music</a>
+        <a href="index.html#features">Features</a>
+        <a href="faq.html">FAQ</a>
+        <a href="privacy.html">Privacy</a>
+        <a class="nav-cta" href="index.html#download">Download</a>
+      </div>
+      <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span>
+      </button>
     </div>
-    <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-      <span></span><span></span>
-    </button>
   </div>
 </nav>
 
@@ -323,14 +60,16 @@ h1 {
   <a href="index.html#features">Features</a>
   <a href="faq.html">FAQ</a>
   <a href="privacy.html">Privacy</a>
+  <a href="index.html#download">Download</a>
 </div>
 
+
 <main class="stage">
-  <div class="stage-glow" aria-hidden="true"></div>
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 
   <img class="app-icon" src="images/icon.png" alt="Knotch app icon" width="84" height="84">
 
-  <h1>Your download is<br><span class="grad-text">starting…</span></h1>
+  <h1 class="headline">Your download is <span class="tone">starting…</span></h1>
 
   <p class="lede">Fetching the latest release from GitHub. If it doesn't start in a few seconds, use the link below.</p>
 
@@ -342,7 +81,7 @@ h1 {
     <a href="#" id="manual-href">Click here to download manually <span class="chev">›</span></a>
   </div>
 
-  <div class="dl-note">
+  <div class="dl-note gpanel">
     <span class="dl-note-title">
       <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6.5" stroke="#6fa0ff" stroke-width="1.4"/><path d="M7.5 4v4M7.5 10.6v.1" stroke="#6fa0ff" stroke-width="1.6" stroke-linecap="round"/></svg>
       First launch on macOS
@@ -352,10 +91,8 @@ h1 {
     <p>Or open the app, dismiss the warning, and choose Open Anyway in System Settings › Privacy &amp; Security.</p>
   </div>
 
-  <a href="index.html" class="back">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 2 3.5 6l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Back to Knotch
-  </a>
+  <div class="gbtn-wrap"><a class="gbtn is-sm" href="index.html"><span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 2 3.5 6l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to Knotch</span></a><div class="gbtn-shadow" aria-hidden="true"></div></div>
 </main>
 
 <script>
@@ -411,31 +148,7 @@ window.scrollTo(0, 0);
     fail(null);
   }
 })();
-
-/* Mobile menu */
-(function () {
-  var burger = document.getElementById("navBurger");
-  var mobileMenu = document.getElementById("mobileMenu");
-  function setMenu(open) {
-    document.body.classList.toggle("menu-open", open);
-    burger.setAttribute("aria-expanded", open ? "true" : "false");
-  }
-  burger.addEventListener("click", function () {
-    setMenu(!document.body.classList.contains("menu-open"));
-  });
-  mobileMenu.querySelectorAll("a").forEach(function (a) {
-    a.addEventListener("click", function () { setMenu(false); });
-  });
-  mobileMenu.addEventListener("click", function (e) {
-    if (e.target === mobileMenu) setMenu(false);
-  });
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") setMenu(false);
-  });
-  window.addEventListener("resize", function () {
-    if (window.innerWidth > 700) setMenu(false);
-  });
-})();
 </script>
+<script src="site.js"></script>
 </body>
 </html>
